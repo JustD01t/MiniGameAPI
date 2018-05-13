@@ -1,0 +1,16 @@
+name: MiniGameAPI
+main: minigameapi\MiniGameAPI
+version: 1.0.0
+api: [1.0.0]
+author: MiniGameAPI-PM Team
+description: The plugin that helps to managing minigame plugins
+website: https://github.com/MiniGameAPI-PM
+commands:
+ minigameapi:
+  description: Main command of MiniGameAPI
+  usage: "Usage: /minigameapi"
+  permission: minigameapi.command.main
+permissions:
+ exampleplugin.command.main:
+  description: "Allows the user to run the example command"
+  default: true
