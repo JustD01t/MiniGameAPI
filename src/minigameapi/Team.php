@@ -1,5 +1,5 @@
 <?php
-namespace minigameapi\team;
+namespace minigameapi;
 
 use pocketmine\Player;
 use pocketmine\Server;
@@ -43,18 +43,27 @@ class Team {
 			Server::getInstance()->getLogger()->error('adding new player on full team');
 			return false;
 		}
-		$this->removeExistsPlayers($player);
+		$this->removePlayers($player);
 		$this->players[] = $player;
 		return true;
 	}
-	public function removeExistsPlayers(Player $player) {
+	public function getPlayers() : array {
+		return $this->players;
+	}
+	public function removesPlayers(Player $player) {
 		foreach ($this->players as $key => $pl) {
 			$pl instanceof Player;
 			if($player->getName() == $pl->getName()) {
 				unset($this->players[$key]);
-				break;
 			}
 		}
 		$this->players = array_values($this->players);
+	}
+	public function broadcastMessage(string $message) {
+		foreach($this->getPlayers() as $player) {
+			//$player instanceof Player;
+			$player->sendMessage($message);
+		}
+		return;
 	}
 }
