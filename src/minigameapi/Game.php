@@ -16,8 +16,23 @@ abstract class Game {
 		$this->waitingRoom = $waitingRoom;
 		$this->waitingTime = $waitingTime;
 	}
+	public function broadcastMessage(string $message){
+		foreach($this->teams as $team) {
+			$team->broadcastMessage($message);
+		}
+		return;
+	}
 	public function addTeam(Team $team) {
 		$this->teams[] = $team
-		return true;
+		return;
+	}
+	pubic function removeTeam(string $teamname) {
+		foreach($this->teams as $key => $team){
+			if($team->getName() == $teamname){
+				unset($this->teams[$key]);
+			}
+		}
+		$this->teams = array_values($this->teams);
+		return;
 	}
 }
