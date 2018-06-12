@@ -19,7 +19,7 @@ class Team {
 	public function getMaxPlayers() : int{
 		return $this->maxPlayers;
 	}
-	public function setMaxPlayers(int $maxPlayers) : bool{
+	public function setMaxPlayer(int $maxPlayers) : bool{
 		if(count($this->players) > $maxPlayers) {
 			Server::getInstance()->getLogger()->error('$maxPlayers has to be smaller than count of players in team');
 			return FALSE;
