@@ -50,7 +50,7 @@ class Team {
 	public function getPlayers() : array {
 		return $this->players;
 	}
-	public function removesPlayer(Player $player) {
+	public function removePlayer(Player $player) {
 		foreach ($this->players as $key => $pl) {
 			$pl instanceof Player;
 			if($player->getName() == $pl->getName()) {
