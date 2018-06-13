@@ -52,9 +52,7 @@ abstract class Game {
 	public function getPlayers() : array{
 		$result = [];
 		foreach($this->getTeams() as $team) {
-			foreach($team->getPlayers() as $player) {
-				$result[] = $player;
-			}
+			$result = array_merge($result,$team->getPlayers());
 		}
 		return $result;
 	}
