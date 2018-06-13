@@ -4,7 +4,7 @@ namespace minigameapi;
 
 use pocketmine\plugin\PluginBase;
 
-class MiniGameAPI extends PluginManager {
+class MiniGameApi extends PluginManager {
   private $gameManager;
   private $gameId;
   public function setGameId(int $id){
