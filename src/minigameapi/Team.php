@@ -34,10 +34,6 @@ class Team {
 		$this->minPlayers = $minPlayers;
 		return;
 	}
-	public function setTeamName(string $teamName) {
-		$this->teamName = $teamName;
-		return;
-	}
 	public function addPlayer(Player $player) : bool{
 		if(count($this->players) == $this->maxPlayers) {
 			Server::getInstance()->getLogger()->error('adding new player on full team');
