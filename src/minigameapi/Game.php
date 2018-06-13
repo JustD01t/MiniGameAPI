@@ -27,14 +27,19 @@ abstract class Game {
 		$this->teams[] = $team
 		return;
 	}
-	public function removeTeam(string $teamname) {
+	public function removeTeam(string $teamName) {
 		foreach($this->teams as $key => $team){
-			if($team->getName() == $teamname){
+			if($team->getName() == $teamName){
 				unset($this->teams[$key]);
 			}
 		}
 		$this->teams = array_values($this->teams);
 		return;
+	}
+	public function getTeam(string $teamName) : ?Team{
+		foreach($this->getTeams() as $team) {
+			if($teamName == $team->getName()) return $team;
+		}
 	}
 	public function removePlayer(Player $player) {
 		foreach($this->getTeams() as $team) {
@@ -44,6 +49,15 @@ abstract class Game {
 		
 	public function getTeams() : array{
 		return $this->teams;
+	}
+	public function getPlayers() : array{
+		$result = [];
+		foreach($this->getTeams() as $team) {
+			foreach($team->getPlayers() as $player) {
+				$result[] = $player;
+			}
+		}
+		return $result;
 	}
 	public function getTitle() : string{
 		return $this->title;
