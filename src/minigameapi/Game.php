@@ -2,6 +2,7 @@
 namespace minigameapi;
 
 use pocketmine\level\Position;
+use pocketmine\Player;
 
 abstract class Game {
 	const NAME = 'abstract';
@@ -26,7 +27,7 @@ abstract class Game {
 		$this->teams[] = $team
 		return;
 	}
-	pubic function removeTeam(string $teamname) {
+	public function removeTeam(string $teamname) {
 		foreach($this->teams as $key => $team){
 			if($team->getName() == $teamname){
 				unset($this->teams[$key]);
@@ -34,6 +35,15 @@ abstract class Game {
 		}
 		$this->teams = array_values($this->teams);
 		return;
+	}
+	public function removePlayer(Player $player) {
+		foreach($this->getTeams() as $team) {
+			$team->removePlayer($player);
+		}
+	}
+		
+	public function getTeams() : array{
+		return $this->teams;
 	}
 	public function getTitle() : string{
 		return $this->title;
