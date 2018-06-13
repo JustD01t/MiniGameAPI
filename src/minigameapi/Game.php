@@ -35,4 +35,7 @@ abstract class Game {
 		$this->teams = array_values($this->teams);
 		return;
 	}
+	public function getTitle() : string{
+		return $this->title;
+	}
 }
