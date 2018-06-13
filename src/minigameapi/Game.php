@@ -5,14 +5,13 @@ use pocketmine\level\Position;
 use pocketmine\Player;
 
 abstract class Game {
-	const NAME = 'abstract';
-	private $title;
+	private $name;
 	private $runningTime;
 	private $waitingRoom;
 	private $waitingTime;
 	private $teams = [];
-	public function __construct(string $title = self::NAME,?Time $runningTime = new Time(0,5),?Position $waitingRoom, ?Time $waitingTime = new Time(30)) {
-		$this->title = $title;
+	public function __construct(string $name,?Time $runningTime = new Time(0,5),?Position $waitingRoom, ?Time $waitingTime = new Time(30)) {
+		$this->name = $name;
 		$this->runningTime = $runningTime;
 		$this->waitingRoom = $waitingRoom;
 		$this->waitingTime = $waitingTime;
@@ -59,7 +58,7 @@ abstract class Game {
 		}
 		return $result;
 	}
-	public function getTitle() : string{
-		return $this->title;
+	public function getName() : string{
+		return $this->name;
 	}
 }
