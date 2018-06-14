@@ -5,6 +5,10 @@ use pocketmine\level\Position;
 use pocketmine\Player;
 
 abstract class Game {
+	const END_NORMAL = 0;
+	const END_NO_PLAYERS = 1;
+	const END_KILLED_GAME = 3;
+	const END_STARTING_ERROR = 4;
 	private $name;
 	private $runningTime;
 	private $waitingRoom;
@@ -13,7 +17,9 @@ abstract class Game {
 	private $gameManager;
 	private $waitingPlayers;
 	private $started;
-	public function __construct(string $name,?Time $runningTime = new Time(0,5),?Position $waitingRoom, ?Time $waitingTime = new Time(30)) {
+	private $plugin;
+	public function __construct(Plugin $plugin, string $name, Time $runningTime = new Time(0,5),?Position $waitingRoom, Time $waitingTime = new Time(30)) {
+		$this->plugin = $plugin;
 		$this->name = $name;
 		$this->runningTime = $runningTime;
 		$this->waitingRoom = $waitingRoom;
@@ -23,7 +29,10 @@ abstract class Game {
 		if($this->isStarted()) return false;
 		$this->getGameManager()->removePlayer($player);
 		$this->addWaitingPlayer($player);
-		$this->start();
+		foreach($this->getTeams() as $team) {
+			$minPlayers += $team->getMinPlayers();
+			$maxPlayers += $team->getMaxPlayers();
+		}
 		return true;
 	}
 	public function broadcastMessage(string $message){
@@ -32,7 +41,7 @@ abstract class Game {
 		}
 		return;
 	}
-	public function addTeam(Team $team) {
+	public function submitTeam(Team $team) {
 		$team->setGame($this);
 		$this->teams[] = $team
 		return;
@@ -44,6 +53,7 @@ abstract class Game {
 			}
 		}
 		$this->teams = array_values($this->teams);
+		if(count($this->getTeams()) == 0 and $this->isStarted()) $this->end(self::END_NO_PLAYERS);
 		return;
 	}
 	public function getTeam(string $teamName) : ?Team{
@@ -87,5 +97,32 @@ abstract class Game {
 	public function isStarted() : bool {
 		return $this->started;
 	}
-	public function start(); //TODO
+	public function getPlugin() : Plugin{
+		return $this->plugin;
+	}
+	public function isStartable() : bool{
+		foreach($this->getTeams() as $team) {
+			if(count($team->getPlayers()) < $team->getMinPlayers()) return false;
+		}
+		return true;
+	}
+	public function onStart();
+	public function assignPlayers(array $players) {
+		foreach($this->getWaitingPlayers() as $player) {
+			$team = new Team($player->getName(), 1,1);
+			$team->addPlayer($player);
+			$this->submitTeam($team);
+		}
+	}
+	public function start() : bool{
+		$this->assignPlayers($this->getPlayers());
+		if(!isStartable()) {
+			$this->end(self::END_STARTING_ERROR);
+			return false;
+		}
+		foreach($this->getTeams() as $team) {
+			$team->spawn();
+		}
+		$this->onStart();
+	}
 }
