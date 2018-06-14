@@ -88,4 +88,7 @@ class Team {
 			$player->teleport($position);
 		}
 	}
+	public function spawn(){
+		$this->teleport($this->getSpawn);
+	}
 }
