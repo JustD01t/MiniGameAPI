@@ -10,7 +10,8 @@ class Team {
 	private $teamName;
 	private $players = [];
 	private $game;
-	public function __construct(string $teamName, Player $firstPlayer, int $maxPlayers = -1, int $minPlayers = 1) {
+	private $spawn;
+	public function __construct(string $teamName,Player $firstPlayer, int $maxPlayers = -1, int $minPlayers = 1,?Position $spawn) {
 		$this->setMaxPlayers($maxPlayers);
 		$this->setMinPlayers($minPlayers);
 		$this->setTeamName($teamName);
@@ -21,13 +22,11 @@ class Team {
 	}
 	public function setGame(Game $game) {
 		foreach($this->getPlayers() as $player) {
-			foreach($game->getTeams() as $team) {
-				$team->removePlayer($player->getName());
-			}
+			$game->getGameManager()->removePlayer($player);
 		}
 		$this->game = $game;
 	}
-	public function getGame() : Game{
+	public function getGame() : ?Game{
 		return $this->game;
 	}
 	public function setMaxPlayers(int $maxPlayers) : bool{
@@ -45,12 +44,22 @@ class Team {
 		$this->minPlayers = $minPlayers;
 		return;
 	}
+	public function getSpawn() : Postition{
+		return $this->spawn;
+	}
+	public function setSpawn(Postition $spawn) {
+		$this->spawn = $spawn;
+	}
 	public function addPlayer(Player $player) : bool{
 		if(count($this->players) == $this->maxPlayers) {
 			Server::getInstance()->getLogger()->error('adding new player on full team');
 			return false;
 		}
-		$this->removePlayers($player);
+		if(is_null($this->getGame())){
+			$this->removePlayer($player);
+		} else {
+			$this->getGame()->getGameManager()->removePlayer($player);
+		}
 		$this->players[] = $player;
 		return true;
 	}
@@ -65,6 +74,7 @@ class Team {
 			}
 		}
 		$this->players = array_values($this->players);
+		if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
 	}
 	public function broadcastMessage(string $message) {
 		foreach($this->getPlayers() as $player) {
