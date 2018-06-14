@@ -10,14 +10,24 @@ abstract class Game {
 	private $waitingRoom;
 	private $waitingTime;
 	private $teams = [];
+	private $gameManager;
+	private $waitingPlayers;
+	private $started;
 	public function __construct(string $name,?Time $runningTime = new Time(0,5),?Position $waitingRoom, ?Time $waitingTime = new Time(30)) {
 		$this->name = $name;
 		$this->runningTime = $runningTime;
 		$this->waitingRoom = $waitingRoom;
 		$this->waitingTime = $waitingTime;
 	}
+	public function addWaitingPlayer(Player $player) : bool{
+		if($this->isStarted()) return false;
+		$this->getGameManager()->removePlayer($player);
+		$this->addWaitingPlayer($player);
+		$this->start();
+		return true;
+	}
 	public function broadcastMessage(string $message){
-		foreach($this->teams as $team) {
+		foreach($this->getTeams() as $team) {
 			$team->broadcastMessage($message);
 		}
 		return;
@@ -27,7 +37,7 @@ abstract class Game {
 		return;
 	}
 	public function removeTeam(string $teamName) {
-		foreach($this->teams as $key => $team){
+		foreach($this->getTeams() as $key => $team){
 			if($team->getName() == $teamName){
 				unset($this->teams[$key]);
 			}
@@ -41,6 +51,13 @@ abstract class Game {
 		}
 	}
 	public function removePlayer(Player $player) {
+		foreach ($this->getPlayers() as $key => $pl) {
+			//$pl instanceof Player;
+			if($player->getName() == $pl->getName()) {
+				unset($this->waitingPlayers[$key]);
+			}
+		}
+		$this->waitingPlayers = array_values($this->waitingPlayers);
 		foreach($this->getTeams() as $team) {
 			$team->removePlayer($player);
 		}
@@ -50,6 +67,7 @@ abstract class Game {
 		return $this->teams;
 	}
 	public function getPlayers() : array{
+		if($this->isStarted()) return $this->waitingPlayers;
 		$result = [];
 		foreach($this->getTeams() as $team) {
 			$result = array_merge($result,$team->getPlayers());
@@ -59,4 +77,14 @@ abstract class Game {
 	public function getName() : string{
 		return $this->name;
 	}
+	public function getGameManager() : GameManager{
+		return $this->gameManager;
+	}
+	public function setGameManager(GameManager $gameManager){
+		$this->gameManager = $gameManager();
+	}
+	public function isStarted() : bool {
+		return $this->started;
+	}
+	public function start(); //TODO
 }
