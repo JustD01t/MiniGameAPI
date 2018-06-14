@@ -33,6 +33,7 @@ abstract class Game {
 		return;
 	}
 	public function addTeam(Team $team) {
+		$team->setGame($this);
 		$this->teams[] = $team
 		return;
 	}
