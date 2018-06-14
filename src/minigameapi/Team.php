@@ -83,4 +83,9 @@ class Team {
 		}
 		return;
 	}
+	public function teleport(Position $position){
+		foreach($this->getPlayers() as $player) {
+			$player->teleport($position);
+		}
+	}
 }
