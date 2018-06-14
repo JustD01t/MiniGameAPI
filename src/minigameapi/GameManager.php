@@ -13,7 +13,7 @@ class GameManager {
       $game->broadcastMessage($message);
     }
   }
-  public function submitGame(Game $game) {
+  public function registerGame(Game $game) {
     if(!is_null($this->getGame($game->getName()))) return;
     $this->games[] = $game;
   }
@@ -29,6 +29,20 @@ class GameManager {
     $result = [];
     foreach($this->getGames() as $game) {
       $result = array_merge($result,$game->getTeams();
+    }
+    return $result;
+  }
+  public function getTeam(string $teamName) : ?Team{
+    foreach($this->getGames() as $game) {
+      foreach($game->getTeams() as $team) {
+        if($team->getName() == $teamName) return $team;
+      }
+    }
+  }
+  public function getPlayers() : array{
+    $result = [];
+    foreach($this->getGames() as $game){
+      $result = array_merge($result,$game->getPlayers());
     }
     return $result;
   }
