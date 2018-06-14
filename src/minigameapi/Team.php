@@ -9,8 +9,8 @@ class Team {
 	private $minPlayers = 0;
 	private $teamName;
 	private $players = [];
-	
-	public function __construct(string $teamName, Player $firstPlayer, int $maxPlayers = -1, int $minPlayers = 0) {
+	private $game;
+	public function __construct(string $teamName, Player $firstPlayer, int $maxPlayers = -1, int $minPlayers = 1) {
 		$this->setMaxPlayers($maxPlayers);
 		$this->setMinPlayers($minPlayers);
 		$this->setTeamName($teamName);
@@ -18,6 +18,17 @@ class Team {
 	}
 	public function getMaxPlayers() : int{
 		return $this->maxPlayers;
+	}
+	public function setGame(Game $game) {
+		foreach($this->getPlayers() as $player) {
+			foreach($game->getTeams() as $team) {
+				$team->removePlayer($player->getName());
+			}
+		}
+		$this->game = $game;
+	}
+	public function getGame() : Game{
+		return $this->game;
 	}
 	public function setMaxPlayers(int $maxPlayers) : bool{
 		if(count($this->players) > $maxPlayers) {
