@@ -44,7 +44,7 @@ class Team {
 		$this->minPlayers = $minPlayers;
 		return;
 	}
-	public function getSpawn() : Postition{
+	public function getSpawn() : ?Postition{
 		return $this->spawn;
 	}
 	public function setSpawn(Postition $spawn) {
@@ -89,6 +89,6 @@ class Team {
 		}
 	}
 	public function spawn(){
-		$this->teleport($this->getSpawn);
+		if(!is_null($this->getSpawn())) $this->teleport($this->getSpawn);
 	}
 }
