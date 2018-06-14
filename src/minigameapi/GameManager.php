@@ -13,9 +13,18 @@ class GameManager {
       $game->broadcastMessage($message);
     }
   }
-  public function registerGame(Game $game) {
+  public function submitGame(Game $game) {
     if(!is_null($this->getGame($game->getName()))) return;
     $this->games[] = $game;
+  }
+  public function removeGame(string $gameName) {
+    foreach($this->getGames() as $key => $game){
+      if($game->getName() = $gameName) {
+        if($game->isStarted()) $game->end(Game::END_KILLED_GAME);
+        unset($this->games[$key]);
+      }
+    }
+    $this->games = array_values($this->games);
   }
   public function getGames() : array{
     return $this->games()
