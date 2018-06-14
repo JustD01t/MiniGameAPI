@@ -114,6 +114,12 @@ abstract class Game {
 			$this->submitTeam($team);
 		}
 	}
+	public function end(int $endCode) {
+		switch($endCode) {
+			//TODO	
+				
+		}
+	}
 	public function start() : bool{
 		$this->assignPlayers($this->getPlayers());
 		if(!isStartable()) {
