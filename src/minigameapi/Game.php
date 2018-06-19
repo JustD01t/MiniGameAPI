@@ -42,8 +42,9 @@ abstract class Game {
 		return;
 	}
 	public function submitTeam(Team $team) {
+		$this->removeTeam($team->getName());
 		$team->setGame($this);
-		$this->teams[] = $team
+		$this->teams[] = $team;
 		return;
 	}
 	public function removeTeam(string $teamName) {
