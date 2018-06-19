@@ -10,31 +10,68 @@ abstract class Game {
 	const END_KILLED_GAME = 3;
 	const END_STARTING_ERROR = 4;
 	private $name;
+	private $neededPlayers;
 	private $runningTime;
 	private $waitingRoom;
 	private $waitingTime;
 	private $teams = [];
 	private $gameManager;
 	private $waitingPlayers;
-	private $started;
+	private $started = false;
 	private $plugin;
-	public function __construct(Plugin $plugin, string $name, Time $runningTime = new Time(0,5),?Position $waitingRoom, Time $waitingTime = new Time(30)) {
+	private $remainingWaitTime;
+	private $remainingRunTime;
+	public function __construct(Plugin $plugin, string $name,int $neededPlayers = 1,Time $runningTime = new Time(0,5), Time $waitingTime = new Time(30), ?Position $waitingRoom,) {
 		$this->plugin = $plugin;
 		$this->name = $name;
+		$this->neededPlayers = $neededPlayers;
 		$this->runningTime = $runningTime;
 		$this->waitingRoom = $waitingRoom;
 		$this->waitingTime = $waitingTime;
 	}
+	public function getNeededPlayers() : int{
+		return $this->neededPlayers;
+	}
+	public function getRemainingWaitTime() : ?Time {
+		return isset($this->remainingWaitTime) ? $this->remainingWaitTime : null;
+	}
+	public function getWaitingTime() : Time {
+		return $this->waitingTime;
+	}
+	public function getRemainingRunTime() : ?Time {
+		return return isset($this->remainingRunTime) ? $this->remainingRunTime : null;
+	}
+	public function getRunTime() : Time {
+		return $this->runningTime;
+	}
+	public function wait() {
+		$this->remainingWaitTime = $this->getWaitingTime();
+	}
+	public function isWaiting() : bool {
+		return is_null($this->getRemainingWaitTime()) ? false : true;
+	}
+	public function onWait();
+	public function resetWaitingPlayers(){
+		$this->waitingPlayers = [];
+	}
+	public function resetTeams() {
+		$this->teams = [];
+	}
+	public function reset() {
+		$this->resetWaitingPlayers();
+		$this->resetTeams();
+	}
 	public function addWaitingPlayer(Player $player) : bool{
 		if($this->isStarted()) return false;
 		$this->getGameManager()->removePlayer($player);
-		$this->addWaitingPlayer($player);
-		foreach($this->getTeams() as $team) {
-			$minPlayers += $team->getMinPlayers();
-			$maxPlayers += $team->getMaxPlayers();
-		}
+		$this->waitingPlayers[] = $player;
+		if(!is_null($this->getWaitingRoom())) $player->teleport($this->getWaitingRoom());
 		return true;
 	}
+	public function getWaitingRoom() : ?Position {
+		return $this->waitingRoom;
+	}
+			    
 	public function broadcastMessage(string $message){
 		foreach($this->getTeams() as $team) {
 			$team->broadcastMessage($message);
@@ -107,23 +144,29 @@ abstract class Game {
 		}
 		return true;
 	}
+	public function onEnd();
 	public function onStart();
 	public function assignPlayers(array $players) {
 		foreach($this->getWaitingPlayers() as $player) {
 			$team = new Team($player->getName(), 1,1);
 			$team->addPlayer($player);
 			$this->submitTeam($team);
-		}
+		
 	}
 	public function end(int $endCode) {
 		switch($endCode) {
-			//TODO	
-				
+			case self::END_NORMAL:
+			case self::END_NO_PLAYERS:
+			case self::END_KILLED_GAME:
+			case self::END_STARTING_ERROR:
+				$this->onEnd();
+				$this->reset();
+				break;
 		}
 	}
 	public function start() : bool{
 		$this->assignPlayers($this->getPlayers());
-		if(!isStartable()) {
+		if(!$this->isStartable()) {
 			$this->end(self::END_STARTING_ERROR);
 			return false;
 		}
