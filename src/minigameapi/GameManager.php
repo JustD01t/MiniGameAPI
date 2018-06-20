@@ -53,4 +53,5 @@ class GameManager {
       $game->removePlayer($player);
     }
   }
+  public function update();
 }
