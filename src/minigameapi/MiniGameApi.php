@@ -11,7 +11,7 @@ class MiniGameApi extends PluginManager {
 	public function onLoad() {
 		self::$instance = $this;
 	}
-	public function getInstance() : MiniGameApi{
+	public static function getInstance() : MiniGameApi{
 		return self::$instance;
 	}
 	public function onEnable() {
