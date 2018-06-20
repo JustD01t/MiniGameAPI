@@ -2,28 +2,30 @@
 namespace minigameapi;
 
 class Time {
-	private $sec = 0;
-	public function __construct(float $sec = 0, float $min = 0, float $hour = 0) {
+	private $tick = 0;
+	public function __construct(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
 		$this->setTime($sec, $min, $hour);
 	}
-	public function setTime(float $sec = 0, float $min = 0, float $hour = 0) {
-		//TODO support setTime as Tick 시간없어서 못합니다 해주시면 감사하겠습니다.
+	public function setTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
 		$min += $hour * 60;
 		$sec += $min * 60;
-		$this->sec = $sec;
+		$tick += $sec * 20;
+		$this->tick = $tick;
 	}
-	public function addTime(float $sec = 0, float $min = 0, float $hour = 0) {
+	public function addTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
 		$min += $hour * 60;
 		$sec += $min * 60;
-		$this->sec += $sec;
+		$tick += $sec * 20;
+		$this->tick += $tick;
 	}
-	public function reduceTime(float $sec = 0, float $min = 0, float $hour = 0) {
+	public function reduceTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
 		$min += $hour * 60;
 		$sec += $min * 60;
-		$this->sec -= $sec;
+		$tick += $sec * 20;
+		$this->tick -= $tick;
 	}
 	public function asSec() : float {
-		return $this->sec;
+		return $this->tick / 20;
 	}
 	public function asMin() : float {
 		return $this->asSec() / 60;
@@ -31,7 +33,7 @@ class Time {
 	public function asHour() : float {
 		return $this->asMin() / 60;
 	}
-	public function asTick() : float {
-		return $this->asSec() * 20;
+	public function asTick() : int {
+		return (int)round($this->tick,0);
 	}
 }
