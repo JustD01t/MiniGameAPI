@@ -1,8 +1,9 @@
 name: MiniGameAPI
-main: minigameapi\MiniGameAPI
+main: minigameapi\MiniGameApi
 version: 1.0.0
 api: [1.0.0]
 author: MiniGameAPI-PM Team
+#it's not a team yet hahah
 description: The plugin that helps to managing minigame plugins
 website: https://github.com/MiniGameAPI-PM
 commands:
