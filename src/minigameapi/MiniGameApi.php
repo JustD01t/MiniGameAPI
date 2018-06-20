@@ -16,7 +16,7 @@ class MiniGameApi extends PluginBase {
 	}
 	public function onEnable() {
 		$this->gameManager = new GameManager($this);
-		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager()));
+		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager()), 0);
 	}
 	public function getGameManager() : GameManager{
   		return $this->gameManager;
