@@ -21,7 +21,7 @@ abstract class Game {
 	private $plugin;
 	private $remainingWaitTime;
 	private $remainingRunTime;
-	public function __construct(Plugin $plugin, string $name,int $neededPlayers = 1,Time $runningTime = new Time(0,5), Time $waitingTime = new Time(30), ?Position $waitingRoom,) {
+	public function __construct(Plugin $plugin, string $name,int $neededPlayers = 1,Time $runningTime = new Time(0,0,5), Time $waitingTime = new Time(0,30), ?Position $waitingRoom,) {
 		$this->plugin = $plugin;
 		$this->name = $name;
 		$this->neededPlayers = $neededPlayers;
