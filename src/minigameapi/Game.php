@@ -29,6 +29,7 @@ abstract class Game {
 		$this->waitingRoom = $waitingRoom;
 		$this->waitingTime = $waitingTime;
 	}
+	public function onUpdate();
 	public function getNeededPlayers() : int{
 		return $this->neededPlayers;
 	}
@@ -39,13 +40,14 @@ abstract class Game {
 		return $this->waitingTime;
 	}
 	public function getRemainingRunTime() : ?Time {
-		return return isset($this->remainingRunTime) ? $this->remainingRunTime : null;
+		return isset($this->remainingRunTime) ? $this->remainingRunTime : null;
 	}
 	public function getRunTime() : Time {
 		return $this->runningTime;
 	}
 	public function wait() {
 		$this->remainingWaitTime = $this->getWaitingTime();
+		$this->onWait();
 	}
 	public function isWaiting() : bool {
 		return is_null($this->getRemainingWaitTime()) ? false : true;
