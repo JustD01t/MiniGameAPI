@@ -1,7 +1,7 @@
 <?php
 namespace minigameapi;
 
-use pocketmine\sheduler\Task;
+use pocketmine\scheduler\Task;
 
 class GameManagerUpdateTask extends Task {
 	private $gameManager;
