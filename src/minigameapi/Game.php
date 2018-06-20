@@ -161,12 +161,14 @@ abstract class Game {
 			case self::END_NO_PLAYERS:
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
+				unset($this->remainingRunTime);
 				$this->onEnd();
 				$this->reset();
 				break;
 		}
 	}
 	public function start() : bool{
+		unset($this->remainingWaitTime);
 		$this->assignPlayers($this->getPlayers());
 		if(!$this->isStartable()) {
 			$this->end(self::END_STARTING_ERROR);
