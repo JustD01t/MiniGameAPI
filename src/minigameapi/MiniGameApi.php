@@ -18,7 +18,6 @@ class MiniGameApi extends PluginManager {
 		$this->gameManager = new GameManager($this);
 		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager));
 	}
-	static function getInstance(); //TODO 구현
 	public function getGameManager() : GameManager{
   		return $this->gameManager;
 	}
