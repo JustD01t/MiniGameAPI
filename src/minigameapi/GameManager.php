@@ -19,7 +19,7 @@ class GameManager {
   }
   public function removeGame(string $gameName) {
     foreach($this->getGames() as $key => $game){
-      if($game->getName() = $gameName) {
+      if($game->getName() == $gameName) {
         if($game->isStarted()) $game->end(Game::END_KILLED_GAME);
         unset($this->games[$key]);
       }
