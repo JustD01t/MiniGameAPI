@@ -1,8 +1,9 @@
 # MiniGameAPI
 
 **TODO:
-1.Organize functions in alphabetical order []
-2.support command []
+1.Organize functions in alphabetical order [ ]
+
+2.support command [ ]
 
 **Notice:this plugin is developing**
 
