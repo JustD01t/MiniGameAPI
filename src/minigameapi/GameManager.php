@@ -13,6 +13,9 @@ class GameManager {
 			$game->broadcastMessage($message);
 		}
 	}
+	public function getMiniGameApi() : MiniGameApi {
+		return $this->miniGameApi;
+	}
 	public function submitGame(Game $game) {
 		if(!is_null($this->getGame($game->getName()))) return;
 		$this->games[] = $game;
