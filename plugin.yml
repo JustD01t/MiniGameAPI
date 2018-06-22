@@ -1,6 +1,6 @@
 name: MiniGameAPI
 main: minigameapi\MiniGameApi
-version: 1.0.0
+version: ALPHA
 api: [3.0.0-ALPHA12]
 author: MiniGameAPI-PM Team
 #it's not a team yet hahah
@@ -10,8 +10,8 @@ commands:
  minigameapi:
   description: Main command of MiniGameAPI
   usage: "Usage: /minigameapi"
-  permission: minigameapi.command.main
+  permission: minigameapi.command
 permissions:
- exampleplugin.command.main:
-  description: "Allows the user to run the example command"
+ minigameapi.command:
+  description: "Main command of MiniGameAPI"
   default: true
