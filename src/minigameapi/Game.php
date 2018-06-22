@@ -77,6 +77,9 @@ abstract class Game {
 	public function getNeededPlayers() : int{
 		return $this->neededPlayers;
 	}
+	public function getPerfix() : string{
+		return '[' . $this->getName() . ']'
+	}
 	public function getPlayers() : array{
 		if($this->isStarted()) return $this->waitingPlayers;
 		$result = [];
