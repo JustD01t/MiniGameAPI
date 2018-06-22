@@ -18,7 +18,6 @@ abstract class Game {
 	private $teams = [];
 	private $gameManager;
 	private $waitingPlayers;
-	private $started = false;
 	private $plugin;
 	private $remainingWaitTime;
 	private $remainingRunTime;
@@ -33,10 +32,13 @@ abstract class Game {
 	}
 	public function addWaitingPlayer(Player $player) : bool{
 		if($this->isStarted()) return false;
-		$this->getGameManager()->removePlayer($player);
-		$this->waitingPlayers[] = $player;
-		if(!is_null($this->getWaitingRoom())) $player->teleport($this->getWaitingRoom());
-		return true;
+		if($this->onJoin()) {
+			$this->getGameManager()->removePlayer($player);
+			$this->waitingPlayers[] = $player;
+			if(!is_null($this->getWaitingRoom())) $player->teleport($this->getWaitingRoom());
+			return true;
+		}
+		return false;
 	}
 	public function assignPlayers(array $players) {
 		foreach($this->getWaitingPlayers() as $player) {
@@ -58,7 +60,7 @@ abstract class Game {
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
 				unset($this->remainingRunTime);
-				$this->onEnd();
+				$this->onEnd($endCode);
 				$this->reset();
 				break;
 		}
@@ -95,7 +97,7 @@ abstract class Game {
 	public function getWaitingRoom() : ?Position {
 		return $this->waitingRoom;
 	}
-	public function getRunTime() : Time {
+	public function getRunningTime() : Time {
 		return $this->runningTime;
 	}
 	public function getTeam(string $teamName) : ?Team{
@@ -115,18 +117,18 @@ abstract class Game {
 		}
 		return true;
 	}
-	public function isStarted() : bool {
-		return $this->started;
+	public function isRunning() : bool {
 	}
 	public function isWaiting() : bool {
 		return is_null($this->getRemainingWaitTime()) ? false : true;
 	}
-	public function onEnd() {};
-	public function update() {};
-	public function onStart() {};
-	public function onWait() {};
+	public function onEnd(int $endCode) {};
+	public function onJoin() : bool{};
+	public function onStart() : bool{};
+	public function onWait() : bool{};
 	public function onWaiting() {};
 	public function onRunning() {};
+	public function onUpdate() {};
 	public function removePlayer(Player $player) {
 		foreach ($this->getPlayers() as $key => $pl) {
 			//$pl instanceof Player;
@@ -173,12 +175,30 @@ abstract class Game {
 			$team->spawn();
 		}
 		$this->onStart();
+		$this->remainingRunTime = clone $this->getRunningTime();
 	}
 	public function submitTeam(Team $team) {
 		$this->removeTeam($team->getName());
 		$team->setGame($this);
 		$this->teams[] = $team;
 		return;
+	}
+	public function update(int $updateCycle) {
+		if($this->isWaiting()) {
+			$this->getRemainingWaitTime()->reduceTime($updateCycle);
+			if($this->getRemainingWaitTime()->asTick <= 0) {
+				$this->start();
+				return;
+			}
+			$this->onWaiting();
+		} elseif($this->isRunning()) {
+			$this->getRemainingRunTime()->reduceTime($updateCycle);
+			if($this->getRemainingRunTime()->asTick <= 0) {
+				$this->end();
+				return;
+			}
+			$this->onRunning();
+		}
 	}
 	public function wait() {
 		$this->remainingWaitTime = $this->getWaitingTime();
