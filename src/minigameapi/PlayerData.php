@@ -1,6 +1,8 @@
 <?php
 namespace minigameapi;
 
+use pocketmine\Player;
+
 class PlayerData {
 	private $nameTag;
 	private $items = [];
