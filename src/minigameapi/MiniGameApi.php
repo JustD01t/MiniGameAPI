@@ -18,6 +18,7 @@ class MiniGameApi extends PluginBase {
 	}
 	public function onEnable() {
 		@mkdir($this->getDataFolder());
+		@mkdir($this->getDataFolder() . 'playerData');
 		$this->saveDefaultConfig();
 		$this->gameManager = new GameManager($this);
 		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager()), 0);
@@ -28,5 +29,12 @@ class MiniGameApi extends PluginBase {
 	}
 	public function getGameManager() : GameManager{
   		return $this->gameManager;
+	}
+	public function setPlayerData(string $playerName, PlayerData $playerData) {
+		file_put_contents($this->getDataFolder() . strtolower($playerName) . '.json', json_encode($playerData));
+	}
+	public function getPlayerData(string $playerName) : ?PlayerData {
+		if(!file_exists($this->getDataFoler() . strtolower($playerName) . '.json')) return;
+		return json_decode(file_get_contents($this->getDataFoler() . strtolower($playerName) . '.json'));
 	}
 }
