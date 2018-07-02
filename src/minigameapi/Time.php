@@ -36,4 +36,8 @@ class Time {
 	public function asTick() : int {
 		return (int)round($this->tick,0);
 	}
+	public function format() : array {
+		return explode(':',gmdate('H:i:s',$this->asSec()));
+		//array(0 => hour,1 => min, 2 => sec)
+	}
 }
