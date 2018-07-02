@@ -1,5 +1,7 @@
 # MiniGameAPI
 [![paypal](https://www.newsforpublic.com/wp-content/uploads/2015/08/buy-me-a-coffee.png)](https://www.paypal.me/djdisodo/1)
+
+
 **TODO:**
 1.Organize functions in alphabetical order [ ]
 
