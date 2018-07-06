@@ -26,6 +26,9 @@ class MiniGameApi extends PluginBase {
 	public function getBaseLang() : BaseLang{
 		return $this->baseLang;
 	}
+	public function getLogoImagePath() : string {
+	    return $this->getDataFolder() . 'logo.png';
+    }
 	public function getGameManager() : GameManager{
   		return $this->gameManager;
 	}

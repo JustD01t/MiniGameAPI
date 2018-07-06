@@ -19,7 +19,6 @@ abstract class Game {
 	private $waitingRoom;
 	private $waitingTime;
 	private $teams = [];
-	private $gameManager;
 	private $waitingPlayers;
 	private $plugin;
 	private $remainingWaitTime;
@@ -70,9 +69,20 @@ abstract class Game {
 				break;
 		}
 	}
-	public function getGameManager() : GameManager{
-		return $this->gameManager;
+	public function getMiniGameApi() : MiniGameApi {
+	    return $this->getPlugin()->getServer()->getPluginManager()->getPlugin('MiniGameAPI');
+    }
+ 	public function getGameManager() : GameManager{
+		return $this->getMiniGameApi()->getGameManager();
 	}
+	public function getIconImage() : string {
+	    if(isset($this->iconImage)) return $this->iconImage;
+	    return $this->getMiniGameApi()->getLogoImagePath();
+    }
+    public function getIconItem() : Item {
+	    if(isset($this->iconItem)) return $this->iconItem;
+	    return new 
+    }
 	public function getMaxPlayers() : int{
 		return $this->maxPlayers;
 	}
@@ -170,9 +180,6 @@ abstract class Game {
 	}
 	public function resetWaitingPlayers(){
 		$this->waitingPlayers = [];
-	}
-	public function setGameManager(GameManager $gameManager){
-		$this->gameManager = $gameManager;
 	}
     function setIconImage(string $path) {
         if (mime_content_type($path) !== 'image/png') throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconImagePath', [$this->getName()]));
