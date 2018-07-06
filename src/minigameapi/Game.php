@@ -1,6 +1,7 @@
 <?php
 namespace minigameapi;
 
+use minigameapi\event\MiniGamePlayerJoinEvent;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\item\WheatSeeds;
@@ -37,6 +38,9 @@ abstract class Game {
 	}
 	public function addWaitingPlayer(Player $player) : bool{
 		if($this->isRunning()) return false;
+		$ev = new MiniGamePlayerJoinEvent($this, $player);
+		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+		if($ev->isCancelled()) return false;
 		if($this->onJoin()) {
 			$this->getGameManager()->removePlayer($player);
 			$this->waitingPlayers[] = $player;
