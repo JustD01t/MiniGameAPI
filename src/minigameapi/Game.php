@@ -3,6 +3,7 @@ namespace minigameapi;
 
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
+use pocketmine\item\WheatSeeds;
 use pocketmine\level\Position;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
@@ -81,7 +82,7 @@ abstract class Game {
     }
     public function getIconItem() : Item {
 	    if(isset($this->iconItem)) return $this->iconItem;
-	    return new 
+	    return new WheatSeeds();
     }
 	public function getMaxPlayers() : int{
 		return $this->maxPlayers;

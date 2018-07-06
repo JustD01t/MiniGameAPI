@@ -20,8 +20,8 @@ class MiniGameApi extends PluginBase {
 		@mkdir($this->getDataFolder() . 'playerData');
 		$this->saveDefaultConfig();
 		$this->gameManager = new GameManager($this);
-		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager()), 0);
-		$this->baseLang = new BaseLang($this->getConfig()->get('language') == 'auto' ? $this->getServer()->getProperty("settings.language") : $this->getConfig()->get('language'),$this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR);
+		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager()), $this->getConfig()->get('ticks-per-update-cycle', 20));
+		$this->baseLang = new BaseLang($this->getConfig()->get('language', 'auto') == 'auto' ? $this->getServer()->getProperty("settings.language") : $this->getConfig()->get('language'),$this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR);
 	}
 	public function getBaseLang() : BaseLang{
 		return $this->baseLang;
