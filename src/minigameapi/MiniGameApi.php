@@ -20,7 +20,7 @@ class MiniGameApi extends PluginBase {
 		@mkdir($this->getDataFolder() . 'playerData');
 		$this->saveDefaultConfig();
 		$this->gameManager = new GameManager($this);
-		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager()), $this->getConfig()->get('ticks-per-update-cycle', 20));
+		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager(),$this->getConfig()->get('ticks-per-update-cycle', 20)), $this->getConfig()->get('ticks-per-update-cycle', 20));
 		$this->baseLang = new BaseLang($this->getConfig()->get('language', 'auto') == 'auto' ? $this->getServer()->getProperty("settings.language") : $this->getConfig()->get('language'),$this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR);
 	}
 	public function getBaseLang() : BaseLang{
@@ -36,7 +36,7 @@ class MiniGameApi extends PluginBase {
 		file_put_contents($this->getDataFolder() . strtolower($playerName) . '.json', json_encode($playerData));
 	}
 	public function getPlayerData(string $playerName) : ?PlayerData {
-		if(!file_exists($this->getDataFoler() . strtolower($playerName) . '.json')) return;
-		return json_decode(file_get_contents($this->getDataFoler() . strtolower($playerName) . '.json'));
+		if(!file_exists($this->getDataFolder() . strtolower($playerName) . '.json')) return null;
+		return json_decode(file_get_contents($this->getDataFolder() . strtolower($playerName) . '.json'));
 	}
 }
