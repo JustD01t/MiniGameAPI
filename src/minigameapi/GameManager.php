@@ -2,6 +2,8 @@
 
 namespace minigameapi;
 
+use pocketmine\Player;
+
 class GameManager {
 	private $games = [];
 	private $miniGameApi;
@@ -16,9 +18,10 @@ class GameManager {
 	public function getMiniGameApi() : MiniGameApi {
 		return $this->miniGameApi;
 	}
-	public function submitGame(Game $game) {
-		if(!is_null($this->getGame($game->getName()))) return;
+	public function submitGame(Game $game) : bool {
+		if(!is_null($this->getGame($game->getName()))) return false;
 		$this->games[] = $game;
+		return true;
 	}
 	public function removeGame(string $gameName) {
 		foreach($this->getGames() as $key => $game){

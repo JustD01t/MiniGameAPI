@@ -1,25 +1,23 @@
 <?php
 namespace minigameapi;
 
+use pocketmine\level\Position;
 use pocketmine\Player;
-use pocketmine\Server;
 
 class Team {
-	private $maxPlayers = -1;
 	private $minPlayers = 0;
-	private $teamName;
+	private $name;
 	private $players = [];
 	private $game;
 	private $spawn;
-	public function __construct(string $teamName, int $maxPlayers = -1, int $minPlayers = 1,?Position $spawn) {
-		$this->setMaxPlayers($maxPlayers);
+	public function __construct(string $teamName, int $minPlayers = 0,Position $spawn = null) {
+	    $this->name = $teamName;
 		$this->setMinPlayers($minPlayers);
-		$this->setTeamName($teamName);
-		$this->addPlayer($firstPlayer);
+		$this->setSpawn($spawn);
 	}
-	public function getMaxPlayers() : int{
-		return $this->maxPlayers;
-	}
+	public function getName() : string {
+	    return $this->name;
+    }
 	public function setGame(Game $game) {
 		foreach($this->getPlayers() as $player) {
 			$game->getGameManager()->removePlayer($player);
@@ -29,14 +27,6 @@ class Team {
 	public function getGame() : ?Game{
 		return $this->game;
 	}
-	public function setMaxPlayers(int $maxPlayers) : bool{
-		if(count($this->players) > $maxPlayers) {
-			Server::getInstance()->getLogger()->error('$maxPlayers has to be smaller than count of players in team');
-			return FALSE;
-		}
-		$this->maxPlayers = $maxPlayers;
-		return true;
-	}
 	public function getMinPlayers() : int{
 		return $this->minPlayers;
 	}
@@ -44,17 +34,13 @@ class Team {
 		$this->minPlayers = $minPlayers;
 		return;
 	}
-	public function getSpawn() : ?Postition{
+	public function getSpawn() : ?Position{
 		return $this->spawn;
 	}
-	public function setSpawn(Postition $spawn) {
+	public function setSpawn(?Position $spawn) {
 		$this->spawn = $spawn;
 	}
 	public function addPlayer(Player $player) : bool{
-		if(count($this->players) == $this->maxPlayers) {
-			Server::getInstance()->getLogger()->error('adding new player on full team');
-			return false;
-		}
 		if(is_null($this->getGame())){
 			$this->removePlayer($player);
 		} else {
@@ -68,7 +54,6 @@ class Team {
 	}
 	public function removePlayer(Player $player) {
 		foreach ($this->players as $key => $pl) {
-			$pl instanceof Player;
 			if($player->getName() == $pl->getName()) {
 				unset($this->players[$key]);
 			}

@@ -6,23 +6,26 @@ class Time {
 	public function __construct(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
 		$this->setTime($sec, $min, $hour);
 	}
-	public function setTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
+	public function setTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) : Time{
 		$min += $hour * 60;
 		$sec += $min * 60;
 		$tick += $sec * 20;
 		$this->tick = $tick;
+		return $this;
 	}
-	public function addTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
+	public function addTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) : Time{
 		$min += $hour * 60;
 		$sec += $min * 60;
 		$tick += $sec * 20;
 		$this->tick += $tick;
+		return $this;
 	}
 	public function reduceTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
 		$min += $hour * 60;
 		$sec += $min * 60;
 		$tick += $sec * 20;
 		$this->tick -= $tick;
+		return $this;
 	}
 	public function asSec() : float {
 		return $this->tick / 20;

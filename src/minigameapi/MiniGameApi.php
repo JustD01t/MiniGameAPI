@@ -7,7 +7,6 @@ use pocketmine\lang\BaseLang;
 
 class MiniGameApi extends PluginBase {
 	private $gameManager;
-	private $gameId;
 	private static $instance = null;
 	private $baseLang;
 	public function onLoad() {
