@@ -1,6 +1,6 @@
 name: MiniGameAPI
 main: minigameapi\MiniGameApi
-version: ALPHA
+version: BETA
 api: [3.0.0-ALPHA12]
 author: MiniGameAPI-PM Team
 #it's not a team yet hahah

@@ -2,6 +2,7 @@
 
 namespace minigameapi;
 
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
 
 class GameManager {
@@ -39,6 +40,7 @@ class GameManager {
 		foreach($this->getGames() as $game) {
 			if($game->getName() == $gameName) return $game;
 		}
+		return null;
 	}
 	public function getTeams() : array {
 		$result = [];
@@ -60,6 +62,14 @@ class GameManager {
 		}
 		return false;
 	}
+	public function getJoinedGame(Player $player) : ?Game {
+	    foreach ($this->getGames() as $game) {
+	        foreach ($game->getPlayers() as $_player) {
+	            if($player->getName() == $_player->getName()) return $game;
+            }
+        }
+        return null;
+    }
 	public function update(int $updateCycle) {
 		foreach($this->getGames() as $game) {
 			$game->update($updateCycle);

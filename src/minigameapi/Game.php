@@ -39,6 +39,7 @@ abstract class Game {
 	}
 	public function addWaitingPlayer(Player $player) : bool{
 		if($this->isRunning()) return false;
+		if($this->getMaxPlayers() == count($this->getPlayers())) return false;
 		$ev = new MiniGamePlayerJoinEvent($this, $player);
 		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 		if($ev->isCancelled()) return false;

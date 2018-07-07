@@ -2,6 +2,7 @@
 
 namespace minigameapi;
 
+use minigameapi\task\GameManagerUpdateTask;
 use pocketmine\plugin\PluginBase;
 use pocketmine\lang\BaseLang;
 
