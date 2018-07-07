@@ -2,6 +2,7 @@
 namespace minigameapi;
 
 use minigameapi\event\MiniGamePlayerJoinEvent;
+use minigameapi\event\MiniGameStartEvent;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\item\WheatSeeds;
@@ -154,17 +155,22 @@ abstract class Game {
 	public function onWaiting() {}
 	public function onRunning() {}
 	public function onUpdate() {}
-	public function removePlayer(Player $player) {
-		foreach ($this->getPlayers() as $key => $pl) {
-			//$pl instanceof Player;
-			if($player->getName() == $pl->getName()) {
-				unset($this->waitingPlayers[$key]);
-			}
-		}
-		$this->waitingPlayers = array_values($this->waitingPlayers);
-		foreach($this->getTeams() as $team) {
-			$team->removePlayer($player);
-		}
+	public function removePlayer(Player $player) : bool{
+        if($this->isRunning()) {
+            foreach ($this->getTeams() as $team) {
+                if($team->removePlayer($player)) return true;
+            }
+        } else {
+            foreach ($this->getPlayers() as $key => $pl) {
+                //$pl instanceof Player;
+                if ($player->getName() == $pl->getName()) {
+                    unset($this->waitingPlayers[$key]);
+                    $this->waitingPlayers = array_values($this->waitingPlayers);
+                    return true;
+                }
+            }
+        }
+        return false;
 	}
 	public function removeTeam(string $teamName) {
 		foreach($this->getTeams() as $key => $team){
@@ -196,12 +202,17 @@ abstract class Game {
 	}
 	public function start() : bool{
 		unset($this->remainingWaitTime);
+		$this->resetTeams();
 		$this->assignPlayers();
 		if(!$this->isStartable()) {
 			$this->end(self::END_STARTING_ERROR);
 			return false;
 		}
+		$ev = new MiniGameStartEvent($this);
+		$this->getPlugin()->getServer()->getPluginManager()->callEvent($ev);
+		if($ev->isCancelled()) return false;
         if(!$this->onStart()) return false;
+        $this->resetWaitingPlayers();
 		foreach($this->getTeams() as $team) {
 			$team->spawn();
 		}

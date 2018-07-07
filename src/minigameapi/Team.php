@@ -52,14 +52,16 @@ class Team {
 	public function getPlayers() : array {
 		return $this->players;
 	}
-	public function removePlayer(Player $player) {
+	public function removePlayer(Player $player) : bool {
 		foreach ($this->players as $key => $pl) {
 			if($player->getName() == $pl->getName()) {
 				unset($this->players[$key]);
+                $this->players = array_values($this->players);
+                if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
+                return true;
 			}
 		}
-		$this->players = array_values($this->players);
-		if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
+		return false;
 	}
 	public function broadcastMessage(string $message) {
 		foreach($this->getPlayers() as $player) {

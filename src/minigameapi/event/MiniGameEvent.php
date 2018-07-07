@@ -1,11 +1,9 @@
 <?php
 namespace minigameapi\event;
 use minigameapi\Game;
-use minigameapi\MiniGameApi;
-use pocketmine\event\Cancellable;
 use pocketmine\event\Event;
 
-abstract class MiniGameEvent extends Event implements Cancellable{
+abstract class MiniGameEvent extends Event {
     private $game;
     public function __construct(Game $game) {
         $this->game = $game;

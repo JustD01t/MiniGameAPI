@@ -56,8 +56,9 @@ class GameManager {
 	}
 	public function removePlayer(Player $player){
 		foreach($this->getGames() as $game) {
-			$game->removePlayer($player);
+			if($game->removePlayer($player)) return true;
 		}
+		return false;
 	}
 	public function update(int $updateCycle) {
 		foreach($this->getGames() as $game) {

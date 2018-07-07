@@ -1,9 +1,10 @@
 <?php
 namespace minigameapi\event;
 use minigameapi\Game;
+use pocketmine\event\Cancellable;
 use pocketmine\Player;
 
-class  MiniGamePlayerJoinEvent extends MiniGameEvent {
+class  MiniGamePlayerJoinEvent extends MiniGameEvent implements Cancellable{
     private $player;
     public function __construct(Game $game, Player $player) {
         parent::__construct($game);
