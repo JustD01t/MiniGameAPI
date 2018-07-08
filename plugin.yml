@@ -6,12 +6,16 @@ author: MiniGameAPI-PM Team
 #it's not a team yet hahah
 description: The plugin that helps to managing minigame plugins
 website: https://github.com/MiniGameAPI-PM
-commands:
- minigameapi:
-  description: Main command of MiniGameAPI
-  usage: "Usage: /minigameapi"
-  permission: minigameapi.command
 permissions:
- minigameapi.command:
-  description: "Main command of MiniGameAPI"
-  default: true
+ minigameapi:
+  description: "control all functions of minigameapi"
+  default: op
+  children:
+    minigameapi.join:
+      default: true
+    minigameapi.quit:
+      default: true
+    minigameapi.list:
+      default: true
+    minigameapi.kill:
+      default: op

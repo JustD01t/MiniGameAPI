@@ -7,9 +7,9 @@ use pocketmine\command\PluginCommand;
 class QuitCommand extends PluginCommand {
     private $miniGameApiCommand;
     public function __construct(MiniGameApi $miniGameApi) {
-        $this->miniGameApiCommand = new MiniGameApiCommand();
+        $this->miniGameApiCommand = new MiniGameApiCommand($miniGameApi);
         parent::__construct('quitgame',$miniGameApi);
-        $this->setAliases($miniGameApi->getBaseLang()->translateString('command.quit'));
+        $this->setAliases([$miniGameApi->getBaseLang()->translateString('command.quit')]);
         $this->setUsage($miniGameApi->getBaseLang()->translateString('command.quit.usage'));
         $this->setDescription($miniGameApi->getBaseLang()->translateString('command.quit.description'));
         $this->setPermission('minigameapi.quit');

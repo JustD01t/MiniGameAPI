@@ -30,7 +30,7 @@ abstract class Game {
 	private $remainingRunTime;
 	private $iconItem;
 	private $iconImage;
-	private $allowedCommand = [];
+	private $allowedCommands = [];
 	private $prefix;
 	public function __construct(Plugin $plugin, string $name,int $neededPlayers = 1,int $maxPlayers = 9999, Time $runningTime = null, Time $waitingTime = null, Position $waitingRoom = null) {
 		$this->plugin = $plugin;
@@ -43,10 +43,10 @@ abstract class Game {
 		$this->waitingTime = is_null($waitingTime) ? new Time(0,30) : $waitingTime;
 	}
 	final public function addAllowedCommand(string $command) {
-	    $this->allowedCommand[] = $command;
+	    $this->allowedCommands[] = $command;
     }
     final public function addAllowedCommands(array $commands) {
-	    $this->allowedCommand = array_merge($this->allowedCommand, $commands);
+	    $this->allowedCommands = array_merge($this->allowedCommand, $commands);
     }
 	final public function addWaitingPlayer(Player $player) : bool{
 		if($this->isRunning()) return false;
@@ -87,6 +87,9 @@ abstract class Game {
 				break;
 		}
 	}
+	final public function getAllowedCommands() : array {
+	    return $this->allowedCommands;
+    }
 	final public function getMiniGameApi() : MiniGameApi {
 	    return $this->getPlugin()->getServer()->getPluginManager()->getPlugin('MiniGameAPI');
     }
@@ -154,6 +157,18 @@ abstract class Game {
 	final public function getWaitingTime() : Time {
 		return $this->waitingTime;
 	}
+	final public function isAllowedCommand(string $command) : bool{
+	    switch (explode('.', $command)) {
+            case 'minigameapi':
+            case $this->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'):
+            case $this->getMiniGameApi()->getBaseLang()->translateString('command.quit'):
+                return true;
+        }
+        foreach ($this->getAllowedCommands() as $allowedCommand) {
+	        if(explode('.', $allowedCommand) == array_splice(explode('.', $command), count(explode('.', $allowedCommand)))) return true;
+        }
+        return false;
+    }
 	final public function isInGame(Player $player) : bool {
         if(is_null($this->getJoinedTeam($player))) return false;
         return true;

@@ -34,7 +34,7 @@ class GameManager {
 		$this->games = array_values($this->games);
 	}
 	public function getGames() : array{
-		return $this->games();
+		return $this->games;
 	}
 	public function getGame(string $gameName) : ?Game{
 		foreach($this->getGames() as $game) {
