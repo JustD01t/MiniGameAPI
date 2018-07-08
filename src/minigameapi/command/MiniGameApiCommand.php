@@ -1,6 +1,7 @@
 <?php
 namespace minigameapi\command;
 
+use minigameapi\Game;
 use minigameapi\MiniGameApi;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
@@ -21,7 +22,7 @@ class MiniGameApiCommand extends PluginCommand {
         $this->getBaseLang()->translateString('command.miniGameApi.list.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.list')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.list.description') . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.kill.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.kill')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.kill.description') . TextFormat::EOL
         );
-        $this->setPermission('miniGameApi.command');
+        $this->setPermission('minigameapi.command');
         $this->setDescription($this->getBaseLang()->translateString('command.miniGameApi.description'));
     }
     public function execute(CommandSender $sender, string $commandLabel, array $args) {
@@ -40,7 +41,7 @@ class MiniGameApiCommand extends PluginCommand {
                     $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString($this->getPrefix() . 'commandMessage.quitFirst', [$this->getBaseLang()->translateString('command.quit.usage',[$this->getBaseLang()->translateString('command.quit')]), $this->getBaseLang()->translateString('command.miniGameApi.quit.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.quit')])]));
                     break;
                 }
-                $game = $this->getMiniGameApi()->getGameManager()->getGame($args[3]);
+                $game = $this->getMiniGameApi()->getGameManager()->getGame($args[2]);
                 if(is_null($game)) {
                     $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('join.failed.notExistingGame'));
                     break;
@@ -72,13 +73,26 @@ class MiniGameApiCommand extends PluginCommand {
                 $sender->sendMessage($this->getBaseLang()->translateString('quit.failed.notPlaying'));
                 break;
             case $this->getBaseLang()->translateString('command.miniGamaApi.list'):
+                $list = [];
                 foreach ($this->getMiniGameApi()->getGameManager()->getGames() as $game) {
                     $list[] = $game->getName();
                 }
                 $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('list.message'));
                 $sender->sendMessage(TextFormat::YELLOW . implode(', ', $list));
                 break;
+            case  $this->getBaseLang()->translateString('command.miniGameApi.kill'):
+                $game = $this->getMiniGameApi()->getGameManager()->getGame($args[3]);
+                if(is_null($game)) {
+                    $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('kill.failed.notExistingGame'));
+                    break;
+                }
+                $game->end(Game::END_KILLED_GAME);
+                $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('kill.success', [$game->getName()]));
+                break;
+            default:
+                return false;
         }
+        return true;
     }
 
     public function getMiniGameApi() : MiniGameApi {

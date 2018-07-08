@@ -1,6 +1,7 @@
 <?php
 namespace minigameapi;
 
+use minigameapi\event\MiniGamePlayerRemoveEvent;
 use pocketmine\level\Position;
 use pocketmine\Player;
 
@@ -55,6 +56,8 @@ class Team {
 	public function removePlayer(Player $player) : bool {
 		foreach ($this->players as $key => $pl) {
 			if($player->getName() == $pl->getName()) {
+			    $ev = new MiniGamePlayerRemoveEvent($this->getGame(),$player);
+			    $this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 				unset($this->players[$key]);
                 $this->players = array_values($this->players);
                 if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
