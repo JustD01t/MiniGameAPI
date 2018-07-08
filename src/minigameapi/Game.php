@@ -25,7 +25,7 @@ abstract class Game {
 	private $waitingRoom;
 	private $waitingTime;
 	private $teams = [];
-	private $waitingPlayers;
+	private $waitingPlayers = [];
 	private $plugin;
 	private $remainingWaitTime;
 	private $remainingRunTime;
