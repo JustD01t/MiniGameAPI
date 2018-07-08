@@ -63,11 +63,9 @@ class GameManager {
 		return false;
 	}
 	public function getJoinedGame(Player $player) : ?Game {
-	    foreach ($this->getGames() as $game) {
-	        foreach ($game->getPlayers() as $_player) {
-	            if($player->getName() == $_player->getName()) return $game;
-            }
-        }
+        foreach ($this->getGames() as $game) {
+            if ($game->isInGame($player)) return $game;
+	    }
         return null;
     }
 	public function update(int $updateCycle) {

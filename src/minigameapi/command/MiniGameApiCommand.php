@@ -18,6 +18,7 @@ class MiniGameApiCommand extends PluginCommand {
         $this->getPrefix() . 'MiniGameAPI-' . $this->getMiniGameApi()->getDescription()->getVersion() . ' by djdisodo(왕고슴도치)' . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.join.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.join')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.join.description') . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.quit.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.quit')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.quit.description') . TextFormat::EOL .
+        $this->getBaseLang()->translateString('command.miniGameApi.list.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.list')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.list.description') . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.kill.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.kill')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.kill.description') . TextFormat::EOL
         );
         $this->setPermission('miniGameApi.command');
@@ -31,7 +32,7 @@ class MiniGameApiCommand extends PluginCommand {
                     break;
                 }
                 if (!isset($args[1])) {
-                    $sender->sendMessage($this->getMiniGameApi()->getServer()->getLanguage()->translateString(commands.generic.usage,[$this->getBaseLang()->translateString('command.miniGameApi.join.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.join')]) . TextFormat::RED]));
+                    $sender->sendMessage($this->getMiniGameApi()->getServer()->getLanguage()->translateString('commands.generic.usage',[$this->getBaseLang()->translateString('command.miniGameApi.join.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.join')]) . TextFormat::RED]));
                     break;
                 }
                 if (!is_null($this->getMiniGameApi()->getGameManager()->getJoinedGame($sender))) {
@@ -55,6 +56,27 @@ class MiniGameApiCommand extends PluginCommand {
                 if ($game->addWaitingPlayer($sender)) {
                     $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('join.success',[$game->getName()]));
                 }
+                break;
+            case $this->getBaseLang()->translateString('command.miniGameApi.quit'):
+                if (!$sender instanceof Player) {
+                    $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('commandMessage.onlyPlayers'));
+                    break;
+                }
+                if (is_null($this->getMiniGameApi()->getGameManager()->getJoinedGame($sender))) {
+                    $sender->sendMessage($this->getBaseLang()->translateString('quit.failed.notPlaying'));
+                }
+                if($this->getMiniGameApi()->getGameManager()->removePlayer($sender)) {
+                    $sender->sendMessage($this->getMiniGameApi()->getBaseLang()->translateString('quit.success'));
+                    break;
+                }
+                $sender->sendMessage($this->getBaseLang()->translateString('quit.failed.notPlaying'));
+                break;
+            case $this->getBaseLang()->translateString('command.miniGamaApi.list'):
+                foreach ($this->getMiniGameApi()->getGameManager()->getGames() as $game) {
+                    $list[] = $game->getName();
+                }
+                $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('list.message'));
+                $sender->sendMessage(TextFormat::YELLOW . implode(', ', $list));
                 break;
         }
     }

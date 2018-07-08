@@ -2,6 +2,7 @@
 namespace minigameapi;
 
 use minigameapi\event\MiniGamePlayerJoinEvent;
+use minigameapi\event\MiniGamePlayerQuitEvent;
 use minigameapi\event\MiniGameStartEvent;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
@@ -90,6 +91,12 @@ abstract class Game {
 	    if(isset($this->iconItem)) return $this->iconItem;
 	    return new WheatSeeds();
     }
+    public function getJoinedTeam(Player $player) : ?Team {
+	    foreach ($this->getTeams() as $team) {
+	        if($team->isInTeam($player)) return $team;
+        }
+        return null;
+    }
 	public function getMaxPlayers() : int{
 		return $this->maxPlayers;
 	}
@@ -137,6 +144,10 @@ abstract class Game {
 	public function getWaitingTime() : Time {
 		return $this->waitingTime;
 	}
+	public function isInGame(Player $player) : bool {
+        if(is_null($this->getJoinedTeam($player))) return false;
+        return true;
+    }
 	public function isStartable() : bool{
 		foreach($this->getTeams() as $team) {
 			if(count($team->getPlayers()) < $team->getMinPlayers()) return false;
@@ -156,6 +167,12 @@ abstract class Game {
 	public function onWaiting() {}
 	public function onRunning() {}
 	public function onUpdate() {}
+	public function quitPlayer(Player $player) : bool {
+	    $ev = new MiniGamePlayerQuitEvent($this, $player);
+	    $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+	    if ($ev->isCancelled()) return false;
+	    return $this->removePlayer($player);
+    }
 	public function removePlayer(Player $player) : bool{
         if($this->isRunning()) {
             foreach ($this->getTeams() as $team) {

@@ -78,4 +78,10 @@ class Team {
 	public function spawn(){
 		if(!is_null($this->getSpawn())) $this->teleport($this->getSpawn);
 	}
+	public function isInTeam(Player $player) : bool {
+	    foreach ($this->getPlayers() as $pl) {
+	        if($pl->getName() == $player->getName()) return true;
+        }
+        return false;
+    }
 }
