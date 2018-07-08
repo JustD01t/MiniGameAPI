@@ -75,10 +75,10 @@ class MiniGameApiCommand extends PluginCommand {
                     break;
                 }
                 if($this->getMiniGameApi()->getGameManager()->removePlayer($sender)) {
-                    $sender->sendMessage($this->getMiniGameApi()->getBaseLang()->translateString('quit.success'));
+                    $sender->sendMessage($this->getPrefix() . $this->getMiniGameApi()->getBaseLang()->translateString('quit.success'));
                     break;
                 }
-                $sender->sendMessage($this->getBaseLang()->translateString('quit.failed.notPlaying'));
+                $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('quit.failed.notPlaying'));
                 break;
             case $this->getBaseLang()->translateString('command.miniGameApi.list'):
                 if (!$sender->hasPermission('minigameapi.list')) {

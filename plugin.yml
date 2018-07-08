@@ -18,4 +18,4 @@ permissions:
     minigameapi.list:
       default: true
     minigameapi.kill:
-      default: op
+      default: opyy

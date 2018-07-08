@@ -14,7 +14,8 @@ use pocketmine\plugin\Plugin;
 
 abstract class Game {
 	const END_NORMAL = 0;
-	const END_NO_PLAYERS = 1;
+	const END_TIMEOUT = 1;
+	const END_NO_PLAYERS = 2;
 	const END_KILLED_GAME = 3;
 	const END_STARTING_ERROR = 4;
 	private $name;
@@ -46,7 +47,7 @@ abstract class Game {
 	    $this->allowedCommands[] = $command;
     }
     final public function addAllowedCommands(array $commands) {
-	    $this->allowedCommands = array_merge($this->allowedCommand, $commands);
+	    $this->allowedCommands = array_merge($this->allowedCommands, $commands);
     }
 	final public function addWaitingPlayer(Player $player) : bool{
 		if($this->isRunning()) return false;
@@ -54,6 +55,7 @@ abstract class Game {
 		$ev = new MiniGamePlayerJoinEvent($this, $player);
 		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 		if($ev->isCancelled()) return false;
+        $this->getMiniGameApi()->setPlayerData($player->getName(), new PlayerData($player));
 		if($this->onJoin()) {
 			$this->getGameManager()->removePlayer($player);
 			$this->waitingPlayers[] = $player;
@@ -77,12 +79,16 @@ abstract class Game {
 	}
 	final public function end(int $endCode = self::END_NORMAL) {
 		switch($endCode) {
-			case self::END_NORMAL:
+            case self::END_NORMAL:
+            case self::END_TIMEOUT:
 			case self::END_NO_PLAYERS:
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
 				unset($this->remainingRunTime);
 				$this->onEnd($endCode);
+				foreach ($this->getPlayers() as $player) {
+				    $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
+                }
 				$this->reset();
 				break;
 		}
@@ -288,7 +294,7 @@ abstract class Game {
 		} elseif($this->isRunning()) {
 			$this->getRemainingRunTime()->reduceTime($updateCycle);
 			if($this->getRemainingRunTime()->asTick() <= 0) {
-				$this->end();
+				$this->end(self::END_TIMEOUT);
 				return;
 			}
 			$this->onRunning();
