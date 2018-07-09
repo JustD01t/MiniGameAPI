@@ -87,9 +87,9 @@ abstract class Game {
 			case self::END_NO_PLAYERS:
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
-				unset($this->remainingRunTime);
+				unset($this->remainingWaitTime);
+                unset($this->remainingRunTime);
 				$this->onEnd($endCode);
-                unset($this->remainingWaitTime);
 				foreach ($this->getPlayers() as $player) {
                     $this->quitPlayer($player);
                 }
