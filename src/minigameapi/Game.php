@@ -90,7 +90,7 @@ abstract class Game {
 				unset($this->remainingRunTime);
 				$this->onEnd($endCode);
 				foreach ($this->getPlayers() as $player) {
-				    $this->removePlayer($player);
+				    $this->quitPlayer($player);
                 }
 				$this->reset();
 				break;
@@ -208,7 +208,10 @@ abstract class Game {
 	    $ev = new MiniGamePlayerQuitEvent($this, $player);
 	    $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 	    if ($ev->isCancelled()) return false;
-	    return $this->removePlayer($player);
+	    if ($this->removePlayer($player)) {
+            $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
+            return true;
+        }
     }
 	final public function removePlayer(Player $player) : bool{
         if($this->isRunning()) {
@@ -226,7 +229,6 @@ abstract class Game {
                     $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
                     unset($this->waitingPlayers[$key]);
                     $this->waitingPlayers = array_values($this->waitingPlayers);
-                    $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
                     return true;
                 }
             }
