@@ -91,8 +91,8 @@ abstract class Game {
 				foreach ($this->getPlayers() as $player) {
 				  $this->quitPlayer($player);
 				}
-        unset($this->remainingWaitTime);
-        unset($this->remainingWaitTime);
+		unset($this->remainingWaitTime);
+		unset($this->remainingWaitTime);
 				$this->reset();
 				break;
 		}
