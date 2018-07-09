@@ -21,7 +21,7 @@ class MiniGameApi extends PluginBase {
 	public static function getInstance() : MiniGameApi{
 		return self::$instance;
 	}
-	public function onEnable() {
+	public function onEnable() : void{
 		@mkdir($this->getDataFolder());
 		@mkdir($this->getDataFolder() . 'playerData');
 		@mkdir($this->getDataFolder() . 'lang');
