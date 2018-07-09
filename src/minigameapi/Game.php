@@ -287,8 +287,8 @@ abstract class Game {
 	}
 	final public function submitTeam(Team $team) {
 		$this->removeTeam($team->getName());
+		$team->setGame($this);
 		$this->teams[] = $team;
-        $team->setGame($this);
 		return;
 	}
 	final public function update(int $updateCycle) {

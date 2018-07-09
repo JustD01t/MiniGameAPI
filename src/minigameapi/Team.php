@@ -20,9 +20,12 @@ class Team {
 	    return $this->name;
     }
 	public function setGame(Game $game) {
+	    /*
 		foreach($this->getPlayers() as $player) {
 			$game->getGameManager()->removePlayer($player);
 		}
+	    */
+	    //TODO fix
 		$this->game = $game;
 	}
 	public function getGame() : ?Game{
