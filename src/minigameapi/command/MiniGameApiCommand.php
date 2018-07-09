@@ -16,7 +16,7 @@ class MiniGameApiCommand extends PluginCommand {
         parent::__construct('minigameapi', $miniGameApi);
         $this->setAliases([$this->getBaseLang()->translateString('command.miniGameApi')]);
         $this->setUsage(TextFormat::EOL .
-        $this->getPrefix() . 'MiniGameAPI-' . $this->getMiniGameApi()->getDescription()->getVersion() . ' by djdisodo(왕고슴도치)' . TextFormat::EOL .
+        $this->getPrefix() . 'MiniGameAPI-' . $this->getMiniGameApi()->getDescription()->getVersion() . ' by djdisodo(왕고슴도치)' . TextFormat::RESET . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.join.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.join')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.join.description') . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.quit.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.quit')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.quit.description') . TextFormat::EOL .
         $this->getBaseLang()->translateString('command.miniGameApi.list.usage',[$this->getBaseLang()->translateString('command.miniGameApi'), $this->getBaseLang()->translateString('command.miniGameApi.list')]) . TextFormat::GREEN . ' : ' . TextFormat::RESET . $this->getBaseLang()->translateString('command.miniGameApi.list.description') . TextFormat::EOL .
