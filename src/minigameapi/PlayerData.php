@@ -24,6 +24,6 @@ class PlayerData {
 	    $player->teleport(new Position($this->location['x'],$this->location['y'],$this->location['z'],Server::getInstance()->getLevelByName($this->location['level'])));
 		$player->setNameTag($this->nameTag);
 		$player->getInventory()->setContents($this->items,true);
-		$player->getArmorInventory()->setContetns($this->items,true);
+		$player->getArmorInventory()->setContents($this->items,true);
 	}
 }
