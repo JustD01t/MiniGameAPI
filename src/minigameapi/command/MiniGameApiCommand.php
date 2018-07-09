@@ -74,7 +74,7 @@ class MiniGameApiCommand extends PluginCommand {
                     $sender->sendMessage($this->getPrefix() . $this->getBaseLang()->translateString('commandMessage.onlyPlayers'));
                     break;
                 }
-                if($this->getMiniGameApi()->getGameManager()->removePlayer($sender)) {
+                if($this->getMiniGameApi()->getGameManager()->quitPlayer($sender)) {
                     $sender->sendMessage($this->getPrefix() . $this->getMiniGameApi()->getBaseLang()->translateString('quit.success'));
                     break;
                 }

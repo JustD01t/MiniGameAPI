@@ -37,7 +37,7 @@ class Time {
 		return $this->asMin() / 60;
 	}
 	public function asTick() : int {
-		return (int)round($this->tick,0);
+		return intval($this->tick);
 	}
 	public function format() : array {
 		return explode(':',gmdate('H:i:s',$this->asSec()));

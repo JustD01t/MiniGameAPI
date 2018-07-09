@@ -56,7 +56,7 @@ class GameManager {
 		}
 		return $result;
 	}
-	public function removePlayer(Player $player){
+	public function removePlayer(Player $player) : booll{
 		foreach($this->getGames() as $game) {
 			if($game->removePlayer($player)) return true;
 		}

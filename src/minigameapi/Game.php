@@ -212,12 +212,12 @@ abstract class Game {
             $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
             return true;
         }
+        return false;
     }
 	final public function removePlayer(Player $player) : bool{
         if($this->isRunning()) {
             foreach ($this->getTeams() as $team) {
                 if($team->removePlayer($player)) {
-                    $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
                     return true;
                 }
             }
