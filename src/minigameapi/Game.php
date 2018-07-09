@@ -230,6 +230,7 @@ abstract class Game {
 					$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 					unset($this->waitingPlayers[$key]);
 					$this->waitingPlayers = array_values($this->waitingPlayers);
+					if ($this->getNeededPlayers() > count($this->getPlayers())) unset($this->remainingWaitTime);
 					return true;
 				}
 			}

@@ -5,6 +5,7 @@ namespace minigameapi;
 use minigameapi\command\MiniGameApiCommand;
 use minigameapi\command\QuitCommand;
 use minigameapi\listener\PlayerCommandPreprocessEventListener;
+use minigameapi\listener\PlayerJoinEventListener;
 use minigameapi\listener\PlayerQuitEventListener;
 use minigameapi\task\GameManagerUpdateTask;
 use pocketmine\plugin\PluginBase;
@@ -32,6 +33,7 @@ class MiniGameApi extends PluginBase {
 		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager(),$this->getConfig()->get('ticks-per-update-cycle', 20)), $this->getConfig()->get('ticks-per-update-cycle', 20));
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerQuitEventListener($this->getGameManager()), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerCommandPreprocessEventListener($this->getGameManager()), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new PlayerJoinEventListener($this),$this);
 		$this->baseLang = new BaseLang($this->getConfig()->get('language', 'auto') == 'auto' ? $this->getServer()->getProperty("settings.language") : $this->getConfig()->get('language'),$this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR);
 		$this->getServer()->getCommandMap()->register('minigameapi', new MiniGameApiCommand($this));
 		$this->getServer()->getCommandMap()->register('quit', new QuitCommand($this));
