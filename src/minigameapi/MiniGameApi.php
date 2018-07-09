@@ -49,7 +49,7 @@ class MiniGameApi extends PluginBase {
 		file_put_contents($this->getDataFolder() . strtolower($playerName) . '.dat', serialize($playerData));
 	}
 	public function getPlayerData(string $playerName, bool $delete = true) : ?PlayerData {
-		if(!file_exists($this->getDataFolder() . strtolower($playerName) . '.json')) return null;
+		if(!file_exists($this->getDataFolder() . strtolower($playerName) . '.dat')) return null;
 		$return = unserialize(file_get_contents($this->getDataFolder() . strtolower($playerName) . '.dat'));
         if($delete) unlink($this->getDataFolder() . strtolower($playerName) . '.dat');
         return $return;
