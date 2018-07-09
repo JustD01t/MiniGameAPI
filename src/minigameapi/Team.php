@@ -12,20 +12,20 @@ class Team {
 	private $game;
 	private $spawn;
 	public function __construct(string $teamName, int $minPlayers = 0,Position $spawn = null) {
-	    $this->name = $teamName;
+		$this->name = $teamName;
 		$this->setMinPlayers($minPlayers);
 		$this->setSpawn($spawn);
 	}
 	public function getName() : string {
-	    return $this->name;
-    }
+		return $this->name;
+	}
 	public function setGame(Game $game) {
-	    /*
+		/*
 		foreach($this->getPlayers() as $player) {
 			$game->getGameManager()->removePlayer($player);
 		}
-	    */
-	    //TODO fix
+		*/
+		//TODO fix
 		$this->game = $game;
 	}
 	public function getGame() : ?Game{
@@ -59,12 +59,12 @@ class Team {
 	public function removePlayer(Player $player) : bool {
 		foreach ($this->players as $key => $pl) {
 			if($player->getName() == $pl->getName()) {
-			    $ev = new MiniGamePlayerRemoveEvent($this->getGame(),$player);
-			    $this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+				$ev = new MiniGamePlayerRemoveEvent($this->getGame(),$player);
+				$this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 				unset($this->players[$key]);
-                $this->players = array_values($this->players);
-                if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
-                return true;
+				$this->players = array_values($this->players);
+				if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
+				return true;
 			}
 		}
 		return false;
@@ -85,9 +85,9 @@ class Team {
 		if(!is_null($this->getSpawn())) $this->teleport($this->getSpawn());
 	}
 	public function isInTeam(Player $player) : bool {
-	    foreach ($this->getPlayers() as $pl) {
-	        if($pl->getName() == $player->getName()) return true;
-        }
-        return false;
-    }
+		foreach ($this->getPlayers() as $pl) {
+			if($pl->getName() == $player->getName()) return true;
+		}
+		return false;
+	}
 }

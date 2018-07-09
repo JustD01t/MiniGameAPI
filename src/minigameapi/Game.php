@@ -44,35 +44,35 @@ abstract class Game {
 		$this->waitingTime = is_null($waitingTime) ? new Time(0,30) : $waitingTime;
 	}
 	final public function addAllowedCommand(string $command) {
-	    $this->allowedCommands[] = $command;
-    }
-    final public function addAllowedCommands(array $commands) {
-	    $this->allowedCommands = array_merge($this->allowedCommands, $commands);
-    }
+		$this->allowedCommands[] = $command;
+	}
+	final public function addAllowedCommands(array $commands) {
+		$this->allowedCommands = array_merge($this->allowedCommands, $commands);
+	}
 	final public function addWaitingPlayer(Player $player) : bool{
 		if($this->isRunning()) return false;
 		if($this->getMaxPlayers() == count($this->getPlayers())) return false;
 		$ev = new MiniGamePlayerJoinEvent($this, $player);
 		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 		if($ev->isCancelled()) return false;
-        $this->getMiniGameApi()->setPlayerData($player->getName(), new PlayerData($player));
+		$this->getMiniGameApi()->setPlayerData($player->getName(), new PlayerData($player));
 		if($this->onJoin()) {
 			$this->getGameManager()->removePlayer($player);
 			$this->waitingPlayers[] = $player;
 			if(!is_null($this->getWaitingRoom())) $player->teleport($this->getWaitingRoom());
 			$player->getInventory()->clearAll();
-            if($this->getMaxPlayers() == count($this->getPlayers())) $this->start();
+			if($this->getMaxPlayers() == count($this->getPlayers())) $this->start();
 			if($this->getNeededPlayers() == count($this->getPlayers())) $this->wait();
 			return true;
 		}
 		return false;
 	}
-    public function assignPlayers() {
+	public function assignPlayers() {
 		foreach($this->getPlayers() as $player) {
-            $team = new Team($player->getName(), 1, 1);
-            $team->addPlayer($player);
-            $this->submitTeam($team);
-        }
+			$team = new Team($player->getName(), 1, 1);
+			$team->addPlayer($player);
+			$this->submitTeam($team);
+		}
 	}
 	final public function broadcastMessage(string $message){
 		foreach($this->getTeams() as $team) {
@@ -82,43 +82,43 @@ abstract class Game {
 	}
 	final public function end(int $endCode = self::END_NORMAL) {
 		switch($endCode) {
-            case self::END_NORMAL:
-            case self::END_TIMEOUT:
+			case self::END_NORMAL:
+			case self::END_TIMEOUT:
 			case self::END_NO_PLAYERS:
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
 				unset($this->remainingRunTime);
 				$this->onEnd($endCode);
 				foreach ($this->getPlayers() as $player) {
-				    $this->quitPlayer($player);
-                }
+					$this->quitPlayer($player);
+				}
 				$this->reset();
 				break;
 		}
 	}
 	final public function getAllowedCommands() : array {
-	    return $this->allowedCommands;
-    }
+		return $this->allowedCommands;
+	}
 	final public function getMiniGameApi() : MiniGameApi {
-	    return $this->getPlugin()->getServer()->getPluginManager()->getPlugin('MiniGameAPI');
-    }
- 	final public function getGameManager() : GameManager{
+		return $this->getPlugin()->getServer()->getPluginManager()->getPlugin('MiniGameAPI');
+	}
+	final public function getGameManager() : GameManager{
 		return $this->getMiniGameApi()->getGameManager();
 	}
 	final public function getIconImage() : string {
-	    if(isset($this->iconImage)) return $this->iconImage;
-	    return $this->getMiniGameApi()->getLogoImagePath();
-    }
-    final public function getIconItem() : Item {
-	    if(isset($this->iconItem)) return $this->iconItem;
-	    return new WheatSeeds();
-    }
-    final public function getJoinedTeam(Player $player) : ?Team {
-	    foreach ($this->getTeams() as $team) {
-	        if($team->isInTeam($player)) return $team;
-        }
-        return null;
-    }
+		if(isset($this->iconImage)) return $this->iconImage;
+		return $this->getMiniGameApi()->getLogoImagePath();
+	}
+	final public function getIconItem() : Item {
+		if(isset($this->iconItem)) return $this->iconItem;
+		return new WheatSeeds();
+	}
+	final public function getJoinedTeam(Player $player) : ?Team {
+		foreach ($this->getTeams() as $team) {
+			if($team->isInTeam($player)) return $team;
+		}
+		return null;
+	}
 	final public function getMaxPlayers() : int{
 		return $this->maxPlayers;
 	}
@@ -167,24 +167,24 @@ abstract class Game {
 		return $this->waitingTime;
 	}
 	final public function isAllowedCommand(string $command) : bool{
-	    switch (explode('.', $command)) {
-            case 'minigameapi':
-            case $this->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'):
-            case $this->getMiniGameApi()->getBaseLang()->translateString('command.quit'):
-                return true;
-        }
-        foreach ($this->getAllowedCommands() as $allowedCommand) {
-	        if(explode('.', $allowedCommand) == array_splice(explode('.', $command), count(explode('.', $allowedCommand)))) return true;
-        }
-        return false;
-    }
+		switch (explode('.', $command)) {
+			case 'minigameapi':
+			case $this->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'):
+			case $this->getMiniGameApi()->getBaseLang()->translateString('command.quit'):
+				return true;
+		}
+		foreach ($this->getAllowedCommands() as $allowedCommand) {
+			if(explode('.', $allowedCommand) == array_splice(explode('.', $command), count(explode('.', $allowedCommand)))) return true;
+		}
+		return false;
+	}
 	final public function isInGame(Player $player) : bool {
-	    if(!$this->isRunning()) foreach ($this->getPlayers() as $pl) {
-	        if($pl->getName() == $player->getName()) return true;
-        }
-        if(is_null($this->getJoinedTeam($player))) return false;
-        return true;
-    }
+		if(!$this->isRunning()) foreach ($this->getPlayers() as $pl) {
+			if($pl->getName() == $player->getName()) return true;
+		}
+		if(is_null($this->getJoinedTeam($player))) return false;
+		return true;
+	}
 	final public function isStartable() : bool{
 		foreach($this->getTeams() as $team) {
 			if(count($team->getPlayers()) < $team->getMinPlayers()) return false;
@@ -192,7 +192,7 @@ abstract class Game {
 		return true;
 	}
 	final public function isRunning() : bool {
-	    return is_null($this->getRemainingRunTime()) ? false : true;
+		return is_null($this->getRemainingRunTime()) ? false : true;
 	}
 	final public function isWaiting() : bool {
 		return is_null($this->getRemainingWaitTime()) ? false : true;
@@ -205,35 +205,35 @@ abstract class Game {
 	public function onRunning() {}
 	public function onUpdate() {}
 	final public function quitPlayer(Player $player) : bool {
-	    $ev = new MiniGamePlayerQuitEvent($this, $player);
-	    $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
-	    if ($ev->isCancelled()) return false;
-	    if ($this->removePlayer($player)) {
-            $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
-            return true;
-        }
-        return false;
-    }
+		$ev = new MiniGamePlayerQuitEvent($this, $player);
+		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+		if ($ev->isCancelled()) return false;
+		if ($this->removePlayer($player)) {
+			$this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
+			return true;
+		}
+		return false;
+	}
 	final public function removePlayer(Player $player) : bool{
-        if($this->isRunning()) {
-            foreach ($this->getTeams() as $team) {
-                if($team->removePlayer($player)) {
-                    return true;
-                }
-            }
-        } else {
-            foreach ($this->getPlayers() as $key => $pl) {
-                //$pl instanceof Player;
-                if ($player->getName() == $pl->getName()) {
-                    $ev = new MiniGamePlayerRemoveEvent($this,$player);
-                    $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
-                    unset($this->waitingPlayers[$key]);
-                    $this->waitingPlayers = array_values($this->waitingPlayers);
-                    return true;
-                }
-            }
-        }
-        return false;
+		if($this->isRunning()) {
+			foreach ($this->getTeams() as $team) {
+				if($team->removePlayer($player)) {
+					return true;
+				}
+			}
+		} else {
+			foreach ($this->getPlayers() as $key => $pl) {
+				//$pl instanceof Player;
+				if ($player->getName() == $pl->getName()) {
+					$ev = new MiniGamePlayerRemoveEvent($this,$player);
+					$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+					unset($this->waitingPlayers[$key]);
+					$this->waitingPlayers = array_values($this->waitingPlayers);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	final public function removeTeam(string $teamName) {
 		foreach($this->getTeams() as $key => $team){
@@ -255,17 +255,17 @@ abstract class Game {
 	final public function resetWaitingPlayers(){
 		$this->waitingPlayers = [];
 	}
-    final public function setIconImage(string $path) {
-        if (mime_content_type($path) !== 'image/png') throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconImagePath', [$this->getName()]));
-        $this->iconImage = $path;
+	final public function setIconImage(string $path) {
+		if (mime_content_type($path) !== 'image/png') throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconImagePath', [$this->getName()]));
+		$this->iconImage = $path;
 	}
 	final public function setIconItem(Item $item) {
-	    if ($item->getId() == ItemIds::AIR) throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconItem'));
-	    $this->iconItem = $item;
+		if ($item->getId() == ItemIds::AIR) throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconItem'));
+		$this->iconItem = $item;
 	}
 	final public function setPrefix(string $prefix) {
-	    $this->prefix = $prefix;
-    }
+		$this->prefix = $prefix;
+	}
 	final public function start() : bool{
 		unset($this->remainingWaitTime);
 		$this->resetTeams();
@@ -277,8 +277,8 @@ abstract class Game {
 		$ev = new MiniGameStartEvent($this);
 		$this->getPlugin()->getServer()->getPluginManager()->callEvent($ev);
 		if($ev->isCancelled()) return false;
-        if(!$this->onStart()) return false;
-        $this->resetWaitingPlayers();
+		if(!$this->onStart()) return false;
+		$this->resetWaitingPlayers();
 		foreach($this->getTeams() as $team) {
 			$team->spawn();
 		}
