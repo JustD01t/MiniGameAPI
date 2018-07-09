@@ -4,7 +4,7 @@ namespace minigameapi;
 class Time {
 	private $tick = 0;
 	public function __construct(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) {
-		$this->setTime($sec, $min, $hour);
+		$this->setTime($tick, $sec, $min, $hour);
 	}
 	public function setTime(int $tick = 0,float $sec = 0, float $min = 0, float $hour = 0) : Time{
 		$min += $hour * 60;
