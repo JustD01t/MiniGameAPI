@@ -69,7 +69,7 @@ abstract class Game {
 	}
 	public function assignPlayers() {
 		foreach($this->getPlayers() as $player) {
-			$team = new Team($player->getName(), 1, 1);
+			$team = new Team($this, $player->getName(), 1, 1);
 			$team->addPlayer($player);
 			$this->submitTeam($team);
 		}
@@ -87,11 +87,12 @@ abstract class Game {
 			case self::END_NO_PLAYERS:
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
-				unset($this->remainingRunTime);
 				$this->onEnd($endCode);
 				foreach ($this->getPlayers() as $player) {
-					$this->quitPlayer($player);
+				  $this->quitPlayer($player);
 				}
+        unset($this->remainingWaitTime);
+        unset($this->remainingWaitTime);
 				$this->reset();
 				break;
 		}
@@ -287,7 +288,6 @@ abstract class Game {
 	}
 	final public function submitTeam(Team $team) {
 		$this->removeTeam($team->getName());
-		$team->setGame($this);
 		$this->teams[] = $team;
 		return;
 	}
@@ -309,7 +309,7 @@ abstract class Game {
 		}
 	}
 	final public function wait() {
-		$this->remainingWaitTime = $this->getWaitingTime();
+		$this->remainingWaitTime = clone $this->getWaitingTime();
 		$this->onWait();
 	}
 }

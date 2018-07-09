@@ -12,25 +12,17 @@ class Team {
 	private $game;
 	private $spawn;
 	public function __construct(string $teamName, int $minPlayers = 0,Position $spawn = null) {
+    $this->game = $game;
 		$this->name = $teamName;
 		$this->setMinPlayers($minPlayers);
 		$this->setSpawn($spawn);
 	}
 	public function getName() : string {
-		return $this->name;
-	}
-	public function setGame(Game $game) {
-		/*
-		foreach($this->getPlayers() as $player) {
-			$game->getGameManager()->removePlayer($player);
-		}
-		*/
-		//TODO fix
-		$this->game = $game;
-	}
-	public function getGame() : ?Game{
-		return $this->game;
-	}
+    return $this->name;
+  }
+  public function getGame() : ?Game{
+    return $this->game;
+  }
 	public function getMinPlayers() : int{
 		return $this->minPlayers;
 	}
@@ -45,11 +37,8 @@ class Team {
 		$this->spawn = $spawn;
 	}
 	public function addPlayer(Player $player) : bool{
-		if(is_null($this->getGame())){
-			$this->removePlayer($player);
-		} else {
-			$this->getGame()->getGameManager()->removePlayer($player);
-		}
+	    if (!$this->getGame()->isInGame($player)) return false;
+	    $this->getGame()->removePlayer($player);
 		$this->players[] = $player;
 		return true;
 	}
@@ -63,7 +52,7 @@ class Team {
 				$this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 				unset($this->players[$key]);
 				$this->players = array_values($this->players);
-				if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
+				if(count($this->getPlayers()) == 0) $this->getGame()->removeTeam($this->getName());
 				return true;
 			}
 		}
