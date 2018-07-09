@@ -11,18 +11,18 @@ class Team {
 	private $players = [];
 	private $game;
 	private $spawn;
-	public function __construct(Game $game, string $teamName, int $minPlayers = 0,Position $spawn = null) {
-	    $this->game = $game;
-	    $this->name = $teamName;
+	public function __construct(string $teamName, int $minPlayers = 0,Position $spawn = null) {
+    $this->game = $game;
+		$this->name = $teamName;
 		$this->setMinPlayers($minPlayers);
 		$this->setSpawn($spawn);
 	}
 	public function getName() : string {
-	    return $this->name;
-    }
-    public function getGame() : ?Game{
-		return $this->game;
-	}
+    return $this->name;
+  }
+  public function getGame() : ?Game{
+    return $this->game;
+  }
 	public function getMinPlayers() : int{
 		return $this->minPlayers;
 	}
@@ -48,12 +48,12 @@ class Team {
 	public function removePlayer(Player $player) : bool {
 		foreach ($this->players as $key => $pl) {
 			if($player->getName() == $pl->getName()) {
-			    $ev = new MiniGamePlayerRemoveEvent($this->getGame(),$player);
-			    $this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+				$ev = new MiniGamePlayerRemoveEvent($this->getGame(),$player);
+				$this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 				unset($this->players[$key]);
-                $this->players = array_values($this->players);
-                if(count($this->getPlayers()) == 0) $this->getGame()->removeTeam($this->getName());
-                return true;
+				$this->players = array_values($this->players);
+				if(count($this->getPlayers()) == 0) $this->getGame()->removeTeam($this->getName());
+				return true;
 			}
 		}
 		return false;
@@ -74,9 +74,9 @@ class Team {
 		if(!is_null($this->getSpawn())) $this->teleport($this->getSpawn());
 	}
 	public function isInTeam(Player $player) : bool {
-	    foreach ($this->getPlayers() as $pl) {
-	        if($pl->getName() == $player->getName()) return true;
-        }
-        return false;
-    }
+		foreach ($this->getPlayers() as $pl) {
+			if($pl->getName() == $player->getName()) return true;
+		}
+		return false;
+	}
 }

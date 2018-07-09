@@ -62,18 +62,18 @@ class GameManager {
 		}
 		return false;
 	}
-    public function quitPlayer(Player $player) : bool{
-        foreach($this->getGames() as $game) {
-            if($game->quitPlayer($player)) return true;
-        }
-        return false;
-    }
+	public function quitPlayer(Player $player) : bool{
+		foreach($this->getGames() as $game) {
+			if($game->quitPlayer($player)) return true;
+		}
+		return false;
+	}
 	public function getJoinedGame(Player $player) : ?Game {
-        foreach ($this->getGames() as $game) {
-            if ($game->isInGame($player)) return $game;
-	    }
-        return null;
-    }
+		foreach ($this->getGames() as $game) {
+			if ($game->isInGame($player)) return $game;
+		}
+		return null;
+	}
 	public function update(int $updateCycle) {
 		foreach($this->getGames() as $game) {
 			$game->update($updateCycle);

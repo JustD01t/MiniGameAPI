@@ -23,11 +23,11 @@ class MiniGameApi extends PluginBase {
 	public function onEnable() {
 		@mkdir($this->getDataFolder());
 		@mkdir($this->getDataFolder() . 'playerData');
-        @mkdir($this->getDataFolder() . 'lang');
+		@mkdir($this->getDataFolder() . 'lang');
 		$this->saveDefaultConfig();
-        foreach ($this->getResources() as $resource) {
-            if(substr($resource->getFilename(),-3) == 'ini') file_put_contents($this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $resource->getFilename(),file_get_contents($resource->getPathname()));
-        }
+		foreach ($this->getResources() as $resource) {
+			if(substr($resource->getFilename(),-3) == 'ini') file_put_contents($this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $resource->getFilename(),file_get_contents($resource->getPathname()));
+		}
 		$this->gameManager = new GameManager($this);
 		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager(),$this->getConfig()->get('ticks-per-update-cycle', 20)), $this->getConfig()->get('ticks-per-update-cycle', 20));
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerQuitEventListener($this->getGameManager()), $this);
@@ -40,10 +40,10 @@ class MiniGameApi extends PluginBase {
 		return $this->baseLang;
 	}
 	public function getLogoImagePath() : string {
-	    return $this->getDataFolder() . 'logo.png';
-    }
+		return $this->getDataFolder() . 'logo.png';
+	}
 	public function getGameManager() : GameManager{
-  		return $this->gameManager;
+		return $this->gameManager;
 	}
 	public function setPlayerData(string $playerName, PlayerData $playerData) {
 		file_put_contents($this->getDataFolder() . strtolower($playerName) . '.dat', serialize($playerData));
