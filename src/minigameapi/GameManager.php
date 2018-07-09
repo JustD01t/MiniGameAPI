@@ -62,6 +62,12 @@ class GameManager {
 		}
 		return false;
 	}
+    public function quitPlayer(Player $player) : bool{
+        foreach($this->getGames() as $game) {
+            if($game->quitPlayer($player)) return true;
+        }
+        return false;
+    }
 	public function getJoinedGame(Player $player) : ?Game {
         foreach ($this->getGames() as $game) {
             if ($game->isInGame($player)) return $game;
