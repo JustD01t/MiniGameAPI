@@ -52,7 +52,7 @@ class Team {
 			    $this->getGame()->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
 				unset($this->players[$key]);
                 $this->players = array_values($this->players);
-                if(count($this->getPlayers()) == 0 and !is_null($this->getGame())) $this->getGame()->removeTeam($this->getName());
+                if(count($this->getPlayers()) == 0) $this->getGame()->removeTeam($this->getName());
                 return true;
 			}
 		}
