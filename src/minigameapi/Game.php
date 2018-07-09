@@ -87,12 +87,12 @@ abstract class Game {
 			case self::END_NO_PLAYERS:
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
-				unset($this->remainingWaitTime);
-                unset($this->remainingRunTime);
 				$this->onEnd($endCode);
 				foreach ($this->getPlayers() as $player) {
                     $this->quitPlayer($player);
                 }
+                unset($this->remainingWaitTime);
+                unset($this->remainingRunTime);
                 $this->reset();
 				break;
 		}
@@ -309,7 +309,7 @@ abstract class Game {
 		}
 	}
 	final public function wait() {
-		$this->remainingWaitTime = $this->getWaitingTime();
+		$this->remainingWaitTime = clone $this->getWaitingTime();
 		$this->onWait();
 	}
 }
