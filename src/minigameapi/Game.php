@@ -90,7 +90,7 @@ abstract class Game {
 				unset($this->remainingRunTime);
 				$this->onEnd($endCode);
 				foreach ($this->getPlayers() as $player) {
-				    $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
+				    $this->removePlayer($player);
                 }
 				$this->reset();
 				break;
@@ -179,6 +179,9 @@ abstract class Game {
         return false;
     }
 	final public function isInGame(Player $player) : bool {
+	    if(!$this->isRunning()) foreach ($this->getPlayers() as $pl) {
+	        if($pl->getName() == $player->getName()) return true;
+        }
         if(is_null($this->getJoinedTeam($player))) return false;
         return true;
     }
@@ -210,7 +213,9 @@ abstract class Game {
 	final public function removePlayer(Player $player) : bool{
         if($this->isRunning()) {
             foreach ($this->getTeams() as $team) {
-                if($team->removePlayer($player)) return true;
+                if($team->removePlayer($player)) {
+                    $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
+                }
             }
         } else {
             foreach ($this->getPlayers() as $key => $pl) {
@@ -220,6 +225,7 @@ abstract class Game {
                     $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
                     unset($this->waitingPlayers[$key]);
                     $this->waitingPlayers = array_values($this->waitingPlayers);
+                    $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
                     return true;
                 }
             }
@@ -284,10 +290,6 @@ abstract class Game {
 	}
 	final public function update(int $updateCycle) {
 		if($this->isWaiting()) {
-		    if($this->getMaxPlayers() == count($this->getPlayers())) {
-		        $this->start();
-		        return;
-            }
 			$this->getRemainingWaitTime()->reduceTime($updateCycle);
 			if($this->getRemainingWaitTime()->asTick() <= 0) {
 				$this->start();
