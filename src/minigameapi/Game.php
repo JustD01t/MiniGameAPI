@@ -215,6 +215,7 @@ abstract class Game {
             foreach ($this->getTeams() as $team) {
                 if($team->removePlayer($player)) {
                     $this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
+                    return true;
                 }
             }
         } else {

@@ -46,10 +46,10 @@ class MiniGameApi extends PluginBase {
   		return $this->gameManager;
 	}
 	public function setPlayerData(string $playerName, PlayerData $playerData) {
-		file_put_contents($this->getDataFolder() . strtolower($playerName) . '.json', json_encode($playerData));
+		serialize($this->getDataFolder() . strtolower($playerName) . '.dat', json_encode($playerData));
 	}
 	public function getPlayerData(string $playerName) : ?PlayerData {
 		if(!file_exists($this->getDataFolder() . strtolower($playerName) . '.json')) return null;
-		return json_decode(file_get_contents($this->getDataFolder() . strtolower($playerName) . '.json'));
+		return unserialize(file_get_contents($this->getDataFolder() . strtolower($playerName) . '.dat'));
 	}
 }
