@@ -11,7 +11,8 @@ class Team {
 	private $players = [];
 	private $game;
 	private $spawn;
-	public function __construct(string $teamName, int $minPlayers = 0,Position $spawn = null) {
+	public function __construct(Game $game, string $teamName, int $minPlayers = 0,Position $spawn = null) {
+	    $this->game = $game;
 	    $this->name = $teamName;
 		$this->setMinPlayers($minPlayers);
 		$this->setSpawn($spawn);
@@ -19,16 +20,7 @@ class Team {
 	public function getName() : string {
 	    return $this->name;
     }
-	public function setGame(Game $game) {
-	    /*
-		foreach($this->getPlayers() as $player) {
-			$game->getGameManager()->removePlayer($player);
-		}
-	    */
-	    //TODO fix
-		$this->game = $game;
-	}
-	public function getGame() : ?Game{
+    public function getGame() : ?Game{
 		return $this->game;
 	}
 	public function getMinPlayers() : int{
@@ -45,11 +37,8 @@ class Team {
 		$this->spawn = $spawn;
 	}
 	public function addPlayer(Player $player) : bool{
-		if(is_null($this->getGame())){
-			$this->removePlayer($player);
-		} else {
-			$this->getGame()->getGameManager()->removePlayer($player);
-		}
+	    if (!$this->getGame()->isInGame($player)) return false;
+	    $this->getGame()->removePlayer($player);
 		$this->players[] = $player;
 		return true;
 	}

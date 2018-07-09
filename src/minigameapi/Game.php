@@ -69,7 +69,7 @@ abstract class Game {
 	}
     public function assignPlayers() {
 		foreach($this->getPlayers() as $player) {
-            $team = new Team($player->getName(), 1, 1);
+            $team = new Team($this, $player->getName(), 1, 1);
             $team->addPlayer($player);
             $this->submitTeam($team);
         }
@@ -287,7 +287,6 @@ abstract class Game {
 	}
 	final public function submitTeam(Team $team) {
 		$this->removeTeam($team->getName());
-		$team->setGame($this);
 		$this->teams[] = $team;
 		return;
 	}
