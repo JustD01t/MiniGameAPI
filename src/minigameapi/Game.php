@@ -75,8 +75,8 @@ abstract class Game {
 		}
 	}
 	final public function broadcastMessage(string $message){
-		foreach($this->getTeams() as $team) {
-			$team->broadcastMessage($message);
+		foreach($this->getPlayers() as $player) {
+			$player->sendMessage($message);
 		}
 		return;
 	}
