@@ -171,7 +171,6 @@ abstract class Game {
 		return $this->waitingTime;
 	}
 	final public function isAllowedCommand(string $command) : bool{
-	    var_dump($command);
 		switch (explode('.', $command)[0]) {
 			case 'minigameapi':
 			case $this->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'):
