@@ -280,9 +280,12 @@ abstract class Game {
 			return false;
 		}
 		$ev = new MiniGameStartEvent($this);
+        $this->remainingRunTime = clone $this->getRunningTime();
 		$this->getPlugin()->getServer()->getPluginManager()->callEvent($ev);
-		if($ev->isCancelled()) return false;
-		if(!$this->onStart()) return false;
+		if(!$this->onStart() or $ev->isCancelled()) {
+		    unset($this->remainingRunTime);
+		    return false;
+        }
 		$this->resetWaitingPlayers();
 		foreach($this->getTeams() as $team) {
 			$team->spawn();
