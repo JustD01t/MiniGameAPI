@@ -92,7 +92,7 @@ abstract class Game {
 				  $this->quitPlayer($player);
 				}
 		unset($this->remainingWaitTime);
-		unset($this->remainingWaitTime);
+		unset($this->remainingRunTime);
 				$this->reset();
 				break;
 		}
