@@ -61,7 +61,10 @@ abstract class Game {
 			$this->waitingPlayers[] = $player;
 			if(!is_null($this->getWaitingRoom())) $player->teleport($this->getWaitingRoom());
 			$player->getInventory()->clearAll();
-			if($this->getMaxPlayers() == count($this->getPlayers())) $this->start();
+			if($this->getMaxPlayers() == count($this->getPlayers())) {
+                $this->start();
+                return true;
+            }
 			if($this->getNeededPlayers() == count($this->getPlayers())) $this->wait();
 			return true;
 		}
