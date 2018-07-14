@@ -205,9 +205,9 @@ abstract class Game {
 	public function onJoin() : bool{ return true; }
 	public function onStart() : bool{ return true; }
 	public function onWait() : bool{ return true; }
-	public function onWaiting() {}
-	public function onRunning() {}
-	public function onUpdate() {}
+	public function onWaiting(int $updateCycle) {}
+	public function onRunning(int $updateCycle) {}
+	public function onUpdate(int $updateCycle) {}
 	final public function quitPlayer(Player $player) : bool {
 		$ev = new MiniGamePlayerQuitEvent($this, $player);
 		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
@@ -299,20 +299,21 @@ abstract class Game {
 		return;
 	}
 	final public function update(int $updateCycle) {
+	    $this->onUpdate($updateCycle);
 		if($this->isWaiting()) {
 			$this->getRemainingWaitTime()->reduceTime($updateCycle);
 			if($this->getRemainingWaitTime()->asTick() <= 0) {
 				$this->start();
 				return;
 			}
-			$this->onWaiting();
+			$this->onWaiting($updateCycle);
 		} elseif($this->isRunning()) {
 			$this->getRemainingRunTime()->reduceTime($updateCycle);
 			if($this->getRemainingRunTime()->asTick() <= 0) {
 				$this->end(self::END_TIMEOUT);
 				return;
 			}
-			$this->onRunning();
+			$this->onRunning($updateCycle);
 		}
 	}
 	final public function wait() {
