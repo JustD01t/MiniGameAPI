@@ -209,9 +209,11 @@ abstract class Game {
 	public function onRunning(int $updateCycle) {}
 	public function onUpdate(int $updateCycle) {}
 	final public function quitPlayer(Player $player) : bool {
-		$ev = new MiniGamePlayerQuitEvent($this, $player);
-		$this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
-		if ($ev->isCancelled()) return false;
+	    if ($this->isWaiting() or $this->isRunning()) {
+            $ev = new MiniGamePlayerQuitEvent($this, $player);
+            $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
+            if ($ev->isCancelled()) return false;
+        }
 		if ($this->removePlayer($player)) {
 			$this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
 			return true;
