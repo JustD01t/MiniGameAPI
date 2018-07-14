@@ -6,6 +6,7 @@ author: MiniGameAPI-PM Team
 #it's not a team yet hahah
 description: The plugin that helps to managing minigame plugins
 website: https://github.com/MiniGameAPI-PM
+load: POSTWORLD
 permissions:
  minigameapi:
   description: "control all functions of minigameapi"
