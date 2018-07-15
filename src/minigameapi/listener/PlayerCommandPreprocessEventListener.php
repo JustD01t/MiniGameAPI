@@ -13,6 +13,7 @@ class PlayerCommandPreprocessEventListener implements Listener {
 		if($event->isCancelled()) return;
 		$game = $this->gameManager->getJoinedGame($event->getPlayer());
 		if(is_null($game)) return;
+		if (substr($event->getMessage(),0,1) !== '/') return;
 		$event->setCancelled(!$game->isAllowedCommand(substr(implode('.', array_map("stripslashes", str_getcsv($event->getMessage(), " "))),1)));
 		if($event->isCancelled()) {
 			$event->getPlayer()->sendMessage($game->getPrefix() . $this->gameManager->getMiniGameApi()->getBaseLang()->translateString('commandMessage.commandNotAllowedInGame'));
