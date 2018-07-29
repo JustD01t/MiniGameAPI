@@ -17,6 +17,7 @@ class MiniGameApi extends PluginBase {
 	private $baseLang;
 	public function onLoad() {
 		self::$instance = $this;
+		$this->gameManager = new GameManager($this);
 	}
 	public static function getInstance() : MiniGameApi{
 		return self::$instance;
@@ -29,7 +30,7 @@ class MiniGameApi extends PluginBase {
 		foreach ($this->getResources() as $resource) {
 			if(substr($resource->getFilename(),-3) == 'ini') file_put_contents($this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $resource->getFilename(),file_get_contents($resource->getPathname()));
 		}
-		$this->gameManager = new GameManager($this);
+		
 		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager(),$this->getConfig()->get('ticks-per-update-cycle', 20)), $this->getConfig()->get('ticks-per-update-cycle', 20));
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerQuitEventListener($this->getGameManager()), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new PlayerCommandPreprocessEventListener($this->getGameManager()), $this);
