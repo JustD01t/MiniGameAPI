@@ -5,7 +5,7 @@ use minigameapi\Game;
 use minigameapi\MiniGameApi;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
-use pocketmine\lang\BaseLang;
+use pocketmine\lang\Language as BaseLang; //TODO renane
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
