@@ -9,7 +9,7 @@ use minigameapi\listener\PlayerJoinEventListener;
 use minigameapi\listener\PlayerQuitEventListener;
 use minigameapi\task\GameManagerUpdateTask;
 use pocketmine\plugin\PluginBase;
-use pocketmine\lang\BaseLang;
+use pocketmine\lang\Language as BaseLang; //TODO rename
 
 class MiniGameApi extends PluginBase {
 	private $gameManager;
