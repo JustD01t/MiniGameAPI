@@ -35,6 +35,7 @@ abstract class Game {
 	private $allowedCommands = [];
 	private $prefix;
 	private $winner;
+	private $description = '';
 	public function __construct(Plugin $plugin, string $name,int $neededPlayers = 1,int $maxPlayers = 9999, Time $runningTime = null, Time $waitingTime = null, Position $waitingRoom = null) {
 		$this->plugin = $plugin;
 		$this->name = $name;
@@ -114,6 +115,9 @@ abstract class Game {
 	final public function getAllowedCommands() : array {
 		return $this->allowedCommands;
 	}
+	final public function getDescription() : string {
+	    return $this->description;
+    }
 	final public function getMiniGameApi() : MiniGameApi {
 		return $this->getPlugin()->getServer()->getPluginManager()->getPlugin('MiniGameAPI');
 	}
@@ -276,6 +280,9 @@ abstract class Game {
 	final public function resetWaitingPlayers(){
 		$this->waitingPlayers = [];
 	}
+	final public function setDescription(string $description) {
+	    $this->description = $description;
+    }
 	final public function setIconImage(string $path) {
 		if (mime_content_type($path) !== 'image/png') throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getLanguage()->translateString('exception.invalidIconImagePath', [$this->getName()]));
 		$this->iconImage = $path;
