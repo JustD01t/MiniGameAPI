@@ -101,7 +101,7 @@ abstract class Game {
 				if (!is_null($this->getWinner())) {
 				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end.won',[$this->getWinner()->getName(), $this->getName()]));
 				} else {
-				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end',[$this->getName()]));
+				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end.normal',[$this->getName()]));
                 }
 				foreach ($this->getPlayers() as $player) {
 				  $this->quitPlayer($player);
