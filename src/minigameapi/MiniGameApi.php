@@ -31,6 +31,7 @@ class MiniGameApi extends PluginBase {
 		$this->saveDefaultConfig();
 		foreach ($this->getResources() as $resource) {
 			if(substr($resource->getFilename(),-3) == 'ini') file_put_contents($this->getDataFolder() . 'lang' . DIRECTORY_SEPARATOR . $resource->getFilename(),file_get_contents($resource->getPathname()));
+            if(substr($resource->getFilename(),-3) == 'png') file_put_contents($this->getDataFolder() . 'icon.png', file_get_contents(file_get_contents($resource->getPathname())));
 		}
 		
 		$this->getScheduler()->scheduleRepeatingTask(new GameManagerUpdateTask($this->getGameManager(),$this->getConfig()->get('ticks-per-update-cycle', 20)), $this->getConfig()->get('ticks-per-update-cycle', 20));

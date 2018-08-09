@@ -329,7 +329,7 @@ abstract class Game {
 	    $this->onUpdate($updateCycle);
 		if($this->isWaiting()) {
 			$this->getRemainingWaitTime()->reduceTime($updateCycle);
-			if ($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getConfig()->get('show-left-time') !== false and $this->getRemainingWaitTime()->asSec() <= $this->getMiniGameApi()->getConfig()->get('show-left-time'))$this->getMiniGameApi()->getLanguage()->translateString('left.time',[intval($this->getRemainingWaitTime()->asSec())]);
+			if ($this->getMiniGameApi()->getConfig()->get('show-left-time') and $this->getRemainingWaitTime()->asSec() <= $this->getMiniGameApi()->getConfig()->get('show-left-time'))$this->getMiniGameApi()->getLanguage()->translateString('left.time',[intval($this->getRemainingWaitTime()->asSec())]);
 			if($this->getRemainingWaitTime()->asTick() <= 0) {
 				$this->start();
 				return;
@@ -337,7 +337,7 @@ abstract class Game {
 			$this->onWaiting($updateCycle);
 		} elseif($this->isRunning()) {
 			$this->getRemainingRunTime()->reduceTime($updateCycle);
-            if ($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getConfig()->get('show-left-time') !== false and $this->getRemainingRunTime()->asSec() <= $this->getMiniGameApi()->getConfig()->get('show-left-time'))$this->getMiniGameApi()->getLanguage()->translateString('left.time',[intval($this->getRemainingRunTime()->asSec())]);
+            if ($this->getMiniGameApi()->getConfig()->get('show-left-time') and $this->getRemainingRunTime()->asSec() <= $this->getMiniGameApi()->getConfig()->get('show-left-time'))$this->getMiniGameApi()->getLanguage()->translateString('left.time',[intval($this->getRemainingRunTime()->asSec())]);
 			if($this->getRemainingRunTime()->asTick() <= 0) {
 				$this->end(self::END_TIMEOUT);
 				return;
