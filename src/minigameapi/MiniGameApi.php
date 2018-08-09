@@ -39,7 +39,7 @@ class MiniGameApi extends PluginBase {
 		$this->getServer()->getCommandMap()->register('minigameapi', new MiniGameApiCommand($this));
 		$this->getServer()->getCommandMap()->register('quit', new QuitCommand($this));
 	}
-	public function getBaseLang() : Language{
+	public function getLanguage() : Language{
 		return $this->baseLang;
 	}
 	public function getLogoImagePath() : string {

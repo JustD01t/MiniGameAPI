@@ -33,6 +33,7 @@ abstract class Game {
 	private $iconImage;
 	private $allowedCommands = [];
 	private $prefix;
+	private $winner;
 	public function __construct(Plugin $plugin, string $name,int $neededPlayers = 1,int $maxPlayers = 9999, Time $runningTime = null, Time $waitingTime = null, Position $waitingRoom = null) {
 		$this->plugin = $plugin;
 		$this->name = $name;
@@ -157,6 +158,9 @@ abstract class Game {
 	final public function getWaitingRoom() : ?Position {
 		return $this->waitingRoom;
 	}
+	final public function getWinner() : ?Team {
+	    return $this->winner;
+    }
 	final public function getRunningTime() : Time {
 		return $this->runningTime;
 	}
@@ -175,8 +179,8 @@ abstract class Game {
 	final public function isAllowedCommand(string $command) : bool{
 		switch (explode('.', $command)[0]) {
 			case 'minigameapi':
-			case $this->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'):
-			case $this->getMiniGameApi()->getBaseLang()->translateString('command.quit'):
+			case $this->getMiniGameApi()->getLanguage()->translateString('command.miniGameApi'):
+			case $this->getMiniGameApi()->getLanguage()->translateString('command.quit'):
 				return true;
 		}
 		foreach ($this->getAllowedCommands() as $allowedCommand) {
@@ -265,16 +269,19 @@ abstract class Game {
 		$this->waitingPlayers = [];
 	}
 	final public function setIconImage(string $path) {
-		if (mime_content_type($path) !== 'image/png') throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconImagePath', [$this->getName()]));
+		if (mime_content_type($path) !== 'image/png') throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getLanguage()->translateString('exception.invalidIconImagePath', [$this->getName()]));
 		$this->iconImage = $path;
 	}
 	final public function setIconItem(Item $item) {
-		if ($item->getId() == ItemIds::AIR) throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getBaseLang()->translateString('exception.invalidIconItem'));
+		if ($item->getId() == ItemIds::AIR) throw new \InvalidArgumentException($this->getGameManager()->getMiniGameApi()->getLanguage()->translateString('exception.invalidIconItem'));
 		$this->iconItem = $item;
 	}
 	final public function setPrefix(string $prefix) {
 		$this->prefix = $prefix;
 	}
+	final public function setWinner(Team $winner) {
+	    $this->winner = $winner;
+    }
 	final public function start() : bool{
 		unset($this->remainingWaitTime);
 		$this->resetTeams();
