@@ -120,7 +120,7 @@ class MiniGameApiCommand extends PluginCommand {
 		return $this->miniGameApi;
 	}
 	public function getPrefix() : string {
-		return TextFormat::GREEN . $this->getMiniGameApi()->getLanguage()->translateString('command.prefix') . ' ' . TextFormat::YELLOW;
+		return $this->getMiniGameApi()->getPrefix();
 	}
 	public function getLanguage() : Language {
 		return $this->getMiniGameApi()->getLanguage();

@@ -10,6 +10,7 @@ use minigameapi\listener\PlayerQuitEventListener;
 use minigameapi\task\GameManagerUpdateTask;
 use pocketmine\lang\Language;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\TextFormat;
 
 class MiniGameApi extends PluginBase {
 	private $gameManager;
@@ -57,4 +58,7 @@ class MiniGameApi extends PluginBase {
         if($delete) unlink($this->getDataFolder() . strtolower($playerName) . '.dat');
         return $return;
 	}
+    public function getPrefix() : string {
+        return TextFormat::GREEN . $this->getLanguage()->translateString('cprefix') . ' ' . TextFormat::YELLOW;
+    }
 }

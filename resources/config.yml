@@ -1,3 +1,4 @@
 ---
 language: auto
 ticks-per-update-cycle: 20
+show-left-time: 10

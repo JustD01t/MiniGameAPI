@@ -16,8 +16,8 @@ class PlayerCommandPreprocessEventListener implements Listener {
 		if (substr($event->getMessage(),0,1) !== '/') return;
 		$event->setCancelled(!$game->isAllowedCommand(substr(implode('.', array_map("stripslashes", str_getcsv($event->getMessage(), " "))),1)));
 		if($event->isCancelled()) {
-			$event->getPlayer()->sendMessage($game->getPrefix() . $this->gameManager->getMiniGameApi()->getBaseLang()->translateString('commandMessage.commandNotAllowedInGame'));
-			$event->getPlayer()->sendMessage($this->gameManager->getMiniGameApi()->getBaseLang()->translateString('commandMessage.quitFirst', [$this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.quit.usage',[$this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.quit')]), $this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi.quit.usage',[$this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'), $this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi.quit')])]));
+			$event->getPlayer()->sendMessage($game->getPrefix() . $this->gameManager->getMiniGameApi()->getLanguage()->translateString('commandMessage.commandNotAllowedInGame'));
+			$event->getPlayer()->sendMessage($this->gameManager->getMiniGameApi()->getLanguage()->translateString('commandMessage.quitFirst', [$this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.quit.usage',[$this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.quit')]), $this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi.quit.usage',[$this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi'), $this->gameManager->getMiniGameApi()->getBaseLang()->translateString('command.miniGameApi.quit')])]));
 		}
 	}
 }

@@ -5,6 +5,7 @@ use minigameapi\event\MiniGamePlayerJoinEvent;
 use minigameapi\event\MiniGamePlayerQuitEvent;
 use minigameapi\event\MiniGamePlayerRemoveEvent;
 use minigameapi\event\MiniGameStartEvent;
+use pocketmine\event\player\PlayerGameModeChangeEvent;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\item\WheatSeeds;
@@ -64,11 +65,13 @@ abstract class Game {
 			$player->getInventory()->clearAll();
 			$player->getArmorInventory()->clearAll();
 			$player->setHealth($player->getMaxHealth());
+			$player->setGamemode(Player::ADVENTURE);
 			if($this->getMaxPlayers() == count($this->getPlayers())) {
                 $this->start();
                 return true;
             }
 			if($this->getNeededPlayers() == count($this->getPlayers())) $this->wait();
+			$this->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('left.players', [$this->getNeededPlayers(), count($this->getPlayers()),$this->getMaxPlayers()]));
 			return true;
 		}
 		return false;
@@ -94,11 +97,16 @@ abstract class Game {
 			case self::END_KILLED_GAME:
 			case self::END_STARTING_ERROR:
 				$this->onEnd($endCode);
+				if (!is_null($this->getWinner())) {
+				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end.wons',[$this->getWinner()->getName(), $this->getName()]));
+				} else {
+				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end',[$this->getName()]));
+                }
 				foreach ($this->getPlayers() as $player) {
 				  $this->quitPlayer($player);
 				}
-		unset($this->remainingWaitTime);
-		unset($this->remainingRunTime);
+				unset($this->remainingWaitTime);
+				unset($this->remainingRunTime);
 				$this->reset();
 				break;
 		}
@@ -302,6 +310,7 @@ abstract class Game {
 			$team->spawn();
 		}
 		$this->remainingRunTime = clone $this->getRunningTime();
+		$this->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('start.started'));
 		return true;
 	}
 	final public function submitTeam(Team $team) {
@@ -313,6 +322,7 @@ abstract class Game {
 	    $this->onUpdate($updateCycle);
 		if($this->isWaiting()) {
 			$this->getRemainingWaitTime()->reduceTime($updateCycle);
+			if ($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getConfig()->get('show-left-time') !== false and $this->getRemainingWaitTime()->asSec() <= $this->getMiniGameApi()->getConfig()->get('show-left-time'))$this->getMiniGameApi()->getLanguage()->translateString('left.time',[intval($this->getRemainingWaitTime()->asSec())]);
 			if($this->getRemainingWaitTime()->asTick() <= 0) {
 				$this->start();
 				return;
@@ -320,6 +330,7 @@ abstract class Game {
 			$this->onWaiting($updateCycle);
 		} elseif($this->isRunning()) {
 			$this->getRemainingRunTime()->reduceTime($updateCycle);
+            if ($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getConfig()->get('show-left-time') !== false and $this->getRemainingRunTime()->asSec() <= $this->getMiniGameApi()->getConfig()->get('show-left-time'))$this->getMiniGameApi()->getLanguage()->translateString('left.time',[intval($this->getRemainingRunTime()->asSec())]);
 			if($this->getRemainingRunTime()->asTick() <= 0) {
 				$this->end(self::END_TIMEOUT);
 				return;
