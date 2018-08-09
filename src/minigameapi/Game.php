@@ -99,7 +99,7 @@ abstract class Game {
 			case self::END_STARTING_ERROR:
 				$this->onEnd($endCode);
 				if (!is_null($this->getWinner())) {
-				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end.wons',[$this->getWinner()->getName(), $this->getName()]));
+				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end.won',[$this->getWinner()->getName(), $this->getName()]));
 				} else {
 				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end',[$this->getName()]));
                 }
