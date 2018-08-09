@@ -232,7 +232,7 @@ abstract class Game {
             $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
             if ($ev->isCancelled()) return false;
         }
-		if ($this->removePlayer($player)) {
+		if ($this->removePlayer($player) and $player->isAlive()) {
 			$this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
 			return true;
 		}
