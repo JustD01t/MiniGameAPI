@@ -19,12 +19,12 @@ class PlayerRespawnEventListener implements Listener {
         $this->miniGameApi->getScheduler()->scheduleDelayedTask(new class($this->miniGameApi, $event->getPlayer()) extends Task {
             public $miniGameApi;
             public $player;
-            public function __construct(PlayerData $miniGameApi, Player $player) {
+            public function __construct(MiniGameApi $miniGameApi, Player $player) {
                 $this->miniGameApi = $miniGameApi;
                 $this->player = $player;
             }
             public function onRun(int $currentTick) {
-                $this->miniGameApi->getPlayerData($event->getPlayer()->getName())->restore($this->player);
+                $this->miniGameApi->getPlayerData($this->player->getName())->restore($this->player);
             }
         }, 5); //TODO rewrite
     }
