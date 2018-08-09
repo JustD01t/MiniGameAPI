@@ -59,6 +59,6 @@ class MiniGameApi extends PluginBase {
         return $return;
 	}
     public function getPrefix() : string {
-        return TextFormat::GREEN . $this->getLanguage()->translateString('cprefix') . ' ' . TextFormat::YELLOW;
+        return TextFormat::GREEN . $this->getLanguage()->translateString('prefix') . ' ' . TextFormat::YELLOW;
     }
 }
