@@ -347,6 +347,7 @@ abstract class Game {
 	}
 	final public function wait() {
 		$this->remainingWaitTime = clone $this->getWaitingTime();
+		$this->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('left.time', [(int)$this->getRemainingWaitTime()->asSec()]));
 		$this->onWait();
 	}
 }
