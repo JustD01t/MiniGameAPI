@@ -24,7 +24,8 @@ class PlayerRespawnEventListener implements Listener {
                 $this->player = $player;
             }
             public function onRun(int $currentTick) {
-                $this->miniGameApi->getPlayerData($this->player->getName())->restore($this->player);
+                $data = $this->miniGameApi->getPlayerData($this->player->getName());
+                if (!is_null($data)) $data->restore($this->player);
             }
         }, 5); //TODO rewrite
     }
