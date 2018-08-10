@@ -11,7 +11,7 @@ class Team {
 	private $players = [];
 	private $game;
 	private $spawn;
-	private $points;
+	private $points = 0;
 	public function __construct(Game $game, string $teamName, int $minPlayers = 0,Position $spawn = null) {
 		$this->game = $game;
 		$this->name = $teamName;
