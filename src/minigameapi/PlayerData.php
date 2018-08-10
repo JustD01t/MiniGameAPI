@@ -13,6 +13,7 @@ class PlayerData {
 	private $armors = [];
 	private $health;
 	private $gamemode;
+	private $score;
 	public function __construct(Player $player) {
 		$this->location['level'] = $player->getLevel()->getFolderName();
 		$this->location['x'] = $player->getX();
@@ -23,6 +24,7 @@ class PlayerData {
 		$this->armors = $player->getArmorInventory()->getContents(true);
 		$this->health = $player->getHealth();
 		$this->gamemode = $player->getGamemode();
+		$this->score = $player->getScoreTag();
 	}
 	public function restore(Player $player) {
 		$player->teleport(new Position($this->location['x'],$this->location['y'],$this->location['z'],Server::getInstance()->getLevelByName($this->location['level'])));
@@ -31,5 +33,6 @@ class PlayerData {
 		$player->getArmorInventory()->setContents($this->armors,true);
 		$player->setHealth($this->health);
 		$player->setGamemode($this->gamemode);
+		$player->setScoreTag($this->score);
 	}
 }
