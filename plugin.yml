@@ -1,6 +1,6 @@
 name: MiniGameAPI
 main: minigameapi\MiniGameApi
-version: 2.2.1
+version: 2.3.0
 api: [4.0.0]
 author: MiniGameAPI-PM Team
 #it's not a team yet hahah

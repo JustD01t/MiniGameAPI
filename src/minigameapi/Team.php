@@ -11,17 +11,30 @@ class Team {
 	private $players = [];
 	private $game;
 	private $spawn;
+	private $points;
 	public function __construct(Game $game, string $teamName, int $minPlayers = 0,Position $spawn = null) {
 		$this->game = $game;
 		$this->name = $teamName;
 		$this->setMinPlayers($minPlayers);
 		$this->setSpawn($spawn);
 	}
+	public function getPoints() : float {
+	    return $this->points;
+    }
+    public function setPoints(float $points) : void {
+	    $this->points = $points;
+    }
+    public function addPoints(float $points) : void {
+	    $this->points += $points;
+    }
+    public function reducePoints(float $points) : void {
+	    $this->points -= $points;
+    }
 	public function getName() : string {
-    return $this->name;
+	return $this->name;
   }
   public function getGame() : ?Game{
-    return $this->game;
+	return $this->game;
   }
 	public function getMinPlayers() : int{
 		return $this->minPlayers;
@@ -37,8 +50,8 @@ class Team {
 		$this->spawn = $spawn;
 	}
 	public function addPlayer(Player $player) : bool{
-	    if (!$this->getGame()->isInGame($player)) return false;
-	    $this->getGame()->removePlayer($player);
+		if (!$this->getGame()->isInGame($player)) return false;
+		$this->getGame()->removePlayer($player);
 		$this->players[] = $player;
 		return true;
 	}
