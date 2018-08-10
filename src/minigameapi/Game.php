@@ -236,7 +236,7 @@ abstract class Game {
 			$this->getMiniGameApi()->getPlayerData($player->getName())->restore($player);
 			return true;
 		}
-		return false;
+		return true;
 	}
 	final public function removePlayer(Player $player) : bool{
 		if($this->isRunning()) {
