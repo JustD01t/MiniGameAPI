@@ -33,6 +33,6 @@ class PlayerData {
 		$player->getArmorInventory()->setContents($this->armors,true);
 		$player->setHealth($this->health);
 		$player->setGamemode($this->gamemode);
-		$player->setScoreTag($this->score);
+		$player->setScoreTag(is_null($this->score) ? '' : $this->score);
 	}
 }
