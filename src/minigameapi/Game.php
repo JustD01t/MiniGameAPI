@@ -104,7 +104,7 @@ abstract class Game {
 				    $this->getMiniGameApi()->getServer()->broadcastMessage($this->getMiniGameApi()->getPrefix() . $this->getMiniGameApi()->getLanguage()->translateString('end.normal',[$this->getName()]));
                 }
 				foreach ($this->getPlayers() as $player) {
-				  $this->quitPlayer($player);
+				  $this->quitPlayer($player,true);
 				}
 				unset($this->remainingWaitTime);
 				unset($this->remainingRunTime);
@@ -226,8 +226,8 @@ abstract class Game {
 	public function onWaiting(int $updateCycle) {}
 	public function onRunning(int $updateCycle) {}
 	public function onUpdate(int $updateCycle) {}
-	final public function quitPlayer(Player $player) : bool {
-	    if ($this->isWaiting() or $this->isRunning()) {
+	final public function quitPlayer(Player $player, bool $end = false) : bool {
+	    if (!$end) {
             $ev = new MiniGamePlayerQuitEvent($this, $player);
             $this->getMiniGameApi()->getServer()->getPluginManager()->callEvent($ev);
             if ($ev->isCancelled()) return false;
